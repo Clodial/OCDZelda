@@ -3,7 +3,7 @@ using System.Collections;
 
 public class PlayerScript : MonoBehaviour
 {
-    private float moveSpeed = 0;
+    public float moveSpeed = 0;
     private float xSpeed = 0;
     private float ySpeed = 0;
     private int[] dashCt = new int[8];
@@ -23,9 +23,9 @@ public class PlayerScript : MonoBehaviour
     private GameObject bow;
     private GameObject spear;
     public Transform prefab;
-    public Renderer rend1;      //Sword Renderer
-    public Renderer rend2;      //Bow Renderer
-    public Renderer rend3;      //Spear Renderer
+    private Renderer rend1;      //Sword Renderer
+    private Renderer rend2;      //Bow Renderer
+    private Renderer rend3;      //Spear Renderer
     
 	// Use this for initialization
 	void Start()
@@ -302,6 +302,7 @@ public class PlayerScript : MonoBehaviour
                 animator.SetInteger("Attack", 1);
                 spear.tag = "Attack";
             }
+            dirCt = 12;
         }
 
         if (animator.GetInteger("Attack") == -1)
@@ -330,8 +331,11 @@ public class PlayerScript : MonoBehaviour
 
     void OnCollisionEnter(Collision other)
     {
-        if (other.gameObject.tag == "Enemy" && invuln == 0)hit = 1;
-        enemyPos = other.transform.position;
+        if (other.gameObject.tag == "Enemy" && invuln == 0)
+        {
+            hit = 1;
+            enemyPos = other.transform.position;
+        }
     }
 
     void OnTriggerEnter(Collider other)
@@ -363,6 +367,7 @@ public class PlayerScript : MonoBehaviour
                 animator.SetInteger("Weapon", 3);
             }
         }
+        else moveSpeed = 0;
     }
 }
 
