@@ -15,15 +15,19 @@ public class PlayerScript : MonoBehaviour
     public int health = 10;
     private int hit = 0;
     private int invuln = 0;
+    private int weapon = 3;
     private Vector3 enemyPos;
     private Animator animator;
     private GameObject sword;
+    private GameObject spear;
+    public Transform prefab;
     
 	// Use this for initialization
 	void Start()
     {
         animator = this.GetComponent<Animator>();
         sword = transform.GetChild (0).gameObject;
+        spear = transform.GetChild (2).gameObject;
         for (int i = 0; i < 8; i++)
             dashCt[i] = 0;
 	}
@@ -263,12 +267,27 @@ public class PlayerScript : MonoBehaviour
         if (Input.GetKeyDown("p"))
         {
             locked = 1;
+            if (weapon == 2) animator.SetInteger("Attack", 1);
         }
         if (Input.GetKeyUp("p"))
         {
             locked = 0;
-            animator.SetInteger("Attack", 1);
-            sword.tag = "Attack";
+            if (weapon == 1)
+            {
+                animator.SetInteger("Attack", 1);
+                sword.tag = "Attack";
+            }
+            if (weapon == 2)
+            {
+                animator.SetInteger("Attack", 0);
+                Transform clone = Instantiate(prefab, transform.position, transform.rotation) as Transform;
+                clone.SendMessage("Set", direction);
+            }
+            if (weapon == 3)
+            {
+                animator.SetInteger("Attack", 1);
+                spear.tag = "Attack";
+            }
         }
         
         //Hurt
