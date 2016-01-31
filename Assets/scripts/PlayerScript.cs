@@ -15,15 +15,28 @@ public class PlayerScript : MonoBehaviour
     public int health = 10;
     private int hit = 0;
     private int invuln = 0;
+    private int weapon = 0;
+    private int bowCt = 0;
     private Vector3 enemyPos;
     private Animator animator;
     private GameObject sword;
+    private GameObject bow;
+    private GameObject spear;
+    public Transform prefab;
+    public Renderer rend1;      //Sword Renderer
+    public Renderer rend2;      //Bow Renderer
+    public Renderer rend3;      //Spear Renderer
     
 	// Use this for initialization
 	void Start()
     {
         animator = this.GetComponent<Animator>();
-        sword = transform.GetChild (0).gameObject;
+        sword = transform.GetChild(0).gameObject;
+        bow = transform.GetChild(1).gameObject;
+        spear = transform.GetChild(2).gameObject;
+        rend1 = sword.GetComponent<Renderer>();
+        rend2 = bow.GetComponent<Renderer>();
+        rend3 = spear.GetComponent<Renderer>();
         for (int i = 0; i < 8; i++)
             dashCt[i] = 0;
 	}
@@ -42,6 +55,7 @@ public class PlayerScript : MonoBehaviour
         if (dash > 1) dash -= 0.1f;
         if (dashCd > 0) dashCd--;
         if (invuln > 0) invuln--;
+        if (bowCt > 0) bowCt--;
         
         
         if (invuln <= 15)
@@ -263,12 +277,38 @@ public class PlayerScript : MonoBehaviour
         if (Input.GetKeyDown("p"))
         {
             locked = 1;
+            if (weapon == 2) animator.SetInteger("Attack", 1);
         }
         if (Input.GetKeyUp("p"))
         {
             locked = 0;
-            animator.SetInteger("Attack", 1);
-            sword.tag = "Attack";
+            if (weapon == 1)
+            {
+                animator.SetInteger("Attack", 1);
+                sword.tag = "Attack";
+            }
+            if (weapon == 2)
+            {
+                animator.SetInteger("Attack", 0);
+                if (bowCt == 0)
+                {
+                    Transform clone = Instantiate(prefab, transform.position, transform.rotation) as Transform;
+                    clone.SendMessage("Set", direction);
+                    bowCt = 30;
+                }
+            }
+            if (weapon == 3)
+            {
+                animator.SetInteger("Attack", 1);
+                spear.tag = "Attack";
+            }
+        }
+
+        if (animator.GetInteger("Attack") == -1)
+        {
+            sword.tag = "Untagged";
+            spear.tag = "Untagged";
+            animator.SetInteger("Attack", 0);
         }
         
         //Hurt
@@ -292,6 +332,37 @@ public class PlayerScript : MonoBehaviour
     {
         if (other.gameObject.tag == "Enemy" && invuln == 0)hit = 1;
         enemyPos = other.transform.position;
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.tag == "Weapon")
+        {
+            if (other.name == "sword")
+            {
+                weapon = 1;
+                rend1.enabled = true;
+                rend2.enabled = false;
+                rend3.enabled = false;
+                animator.SetInteger("Weapon", 1);
+            }
+            if (other.name == "bow")
+            {
+                weapon = 2;
+                rend1.enabled = false;
+                rend2.enabled = true;
+                rend3.enabled = false;
+                animator.SetInteger("Weapon", 2);
+            }
+            if (other.name == "spear")
+            {
+                weapon = 3;
+                rend1.enabled = false;
+                rend2.enabled = false;
+                rend3.enabled = true;
+                animator.SetInteger("Weapon", 3);
+            }
+        }
     }
 }
 

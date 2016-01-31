@@ -2,6 +2,9 @@
 using System.Collections;
 
 public class WeaponStateScript : StateMachineBehaviour {
+
+    private GameObject sword;
+    private GameObject spear;
     
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
 	//override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
@@ -16,6 +19,15 @@ public class WeaponStateScript : StateMachineBehaviour {
     void OnStateUpdate(Animator animator)
     {
         animator.SetInteger("Attack", 0);
+    }
+
+    void OnStateExit()
+    {
+        sword = GameObject.Find("Sword");
+        sword.tag = "Player";
+
+        spear = GameObject.Find("Spear");
+        spear.tag = "Player";
     }
 
 	// OnStateExit is called when a transition ends and the state machine finishes evaluating this state
