@@ -1,0 +1,374 @@
+fileFormatVersion: 2
+guid: e818b4cdcfff7fe409779afea2ca27a2
+timeCreated: 1456387583
+licenseType: Free
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: enemy_camel_0
+    21300002: enemy_camel_1
+    21300004: enemy_camel_2
+    21300006: enemy_camel_3
+    21300008: enemy_camel_4
+    21300010: enemy_camel_5
+    21300012: enemy_camel_6
+    21300014: enemy_camel_7
+    21300016: enemy_camel_8
+    21300018: enemy_camel_9
+    21300020: enemy_camel_10
+    21300022: enemy_camel_11
+    21300024: enemy_camel_12
+    21300026: enemy_camel_13
+    21300028: enemy_camel_14
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 1
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  cubemapConvolution: 0
+  cubemapConvolutionSteps: 7
+  cubemapConvolutionExponent: 1.5
+  seamlessCubemap: 0
+  textureFormat: -1
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: -1
+    aniso: 16
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  rGBM: 0
+  compressionQuality: 50
+  allowsAlphaSplitting: 0
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: enemy_camel_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 33
+        width: 70
+        height: 33
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 8, y: 2.5}
+        - {x: 4, y: 3.5}
+        - {x: -9, y: 3.5}
+        - {x: -35, y: -4.5}
+        - {x: -35, y: -15.5}
+        - {x: -32, y: -16.5}
+        - {x: 11, y: -16.5}
+        - {x: 16, y: -12.5}
+        - {x: 18, y: -9.5}
+        - {x: 18, y: -6.5}
+    - name: enemy_camel_1
+      rect:
+        serializedVersion: 2
+        x: 70
+        y: 33
+        width: 70
+        height: 33
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 3, y: 3.5}
+        - {x: -9, y: 3.5}
+        - {x: -33, y: -1.5}
+        - {x: -35, y: -4.5}
+        - {x: -35, y: -11.5}
+        - {x: -33, y: -16.5}
+        - {x: 14, y: -16.5}
+        - {x: 18, y: -15.5}
+        - {x: 18, y: -6.5}
+        - {x: 8, y: 2.5}
+    - name: enemy_camel_2
+      rect:
+        serializedVersion: 2
+        x: 140
+        y: 33
+        width: 70
+        height: 33
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 8, y: 2.5}
+        - {x: -4, y: 4.5}
+        - {x: -11, y: -1.5}
+        - {x: -18, y: 9.5}
+        - {x: -32, y: 9.5}
+        - {x: -35, y: 3.5}
+        - {x: -35, y: -13.5}
+        - {x: -28, y: -16.5}
+        - {x: 6, y: -16.5}
+        - {x: 16, y: -12.5}
+        - {x: 18, y: -9.5}
+        - {x: 18, y: -6.5}
+    - name: enemy_camel_3
+      rect:
+        serializedVersion: 2
+        x: 210
+        y: 33
+        width: 70
+        height: 33
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 3, y: 16.5}
+        - {x: -35, y: 16.5}
+        - {x: -35, y: -16.5}
+        - {x: 13, y: -16.5}
+        - {x: 18, y: -9.5}
+        - {x: 18, y: 0.5}
+        - {x: 16, y: 12.5}
+    - name: enemy_camel_4
+      rect:
+        serializedVersion: 2
+        x: 280
+        y: 33
+        width: 70
+        height: 33
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -4, y: 4.5}
+        - {x: -11, y: -1.5}
+        - {x: -13, y: 13.5}
+        - {x: -17, y: 16.5}
+        - {x: -35, y: 16.5}
+        - {x: -35, y: -16.5}
+        - {x: 13, y: -16.5}
+        - {x: 18, y: -15.5}
+        - {x: 18, y: -6.5}
+        - {x: 8, y: 2.5}
+    - name: enemy_camel_5
+      rect:
+        serializedVersion: 2
+        x: 350
+        y: 33
+        width: 70
+        height: 33
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 3, y: 16.5}
+        - {x: -35, y: 16.5}
+        - {x: -35, y: -16.5}
+        - {x: 13, y: -16.5}
+        - {x: 18, y: -9.5}
+        - {x: 18, y: 0.5}
+        - {x: 16, y: 12.5}
+    - name: enemy_camel_6
+      rect:
+        serializedVersion: 2
+        x: 420
+        y: 33
+        width: 70
+        height: 33
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -4, y: 4.5}
+        - {x: -11, y: -1.5}
+        - {x: -17, y: 14.5}
+        - {x: -35, y: 14.5}
+        - {x: -35, y: -16.5}
+        - {x: 12, y: -16.5}
+        - {x: 18, y: -10.5}
+        - {x: 18, y: -3.5}
+        - {x: 8, y: 2.5}
+    - name: enemy_camel_7
+      rect:
+        serializedVersion: 2
+        x: 490
+        y: 33
+        width: 70
+        height: 33
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 8, y: 2.5}
+        - {x: 3, y: 3.5}
+        - {x: -29, y: 3.5}
+        - {x: -35, y: -1.5}
+        - {x: -35, y: -13.5}
+        - {x: -31, y: -16.5}
+        - {x: 6, y: -16.5}
+        - {x: 16, y: -12.5}
+        - {x: 18, y: -9.5}
+        - {x: 18, y: -6.5}
+    - name: enemy_camel_8
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 70
+        height: 33
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 13, y: 3.5}
+        - {x: -31, y: 3.5}
+        - {x: -35, y: -3.5}
+        - {x: -35, y: -13.5}
+        - {x: -32, y: -16.5}
+        - {x: 6, y: -16.5}
+        - {x: 16, y: -12.5}
+        - {x: 18, y: -9.5}
+        - {x: 18, y: -5.5}
+    - name: enemy_camel_9
+      rect:
+        serializedVersion: 2
+        x: 70
+        y: 0
+        width: 70
+        height: 33
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -16, y: 3.5}
+        - {x: -16, y: -10.5}
+        - {x: -8, y: -16.5}
+        - {x: 14, y: -16.5}
+        - {x: 16, y: -10.5}
+        - {x: 16, y: -0.5}
+        - {x: 14, y: 3.5}
+    - name: enemy_camel_10
+      rect:
+        serializedVersion: 2
+        x: 140
+        y: 0
+        width: 70
+        height: 33
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 4, y: 3.5}
+        - {x: -6, y: 3.5}
+        - {x: -13, y: -1.5}
+        - {x: -16, y: -8.5}
+        - {x: -10, y: -14.5}
+        - {x: -7, y: -16.5}
+        - {x: 11, y: -16.5}
+        - {x: 16, y: -9.5}
+        - {x: 16, y: -7.5}
+        - {x: 13, y: 1.5}
+    - name: enemy_camel_11
+      rect:
+        serializedVersion: 2
+        x: 210
+        y: 0
+        width: 70
+        height: 33
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -7, y: 3.5}
+        - {x: -16, y: -0.5}
+        - {x: -16, y: -15.5}
+        - {x: -13, y: -16.5}
+        - {x: 13, y: -16.5}
+        - {x: 16, y: -12.5}
+        - {x: 16, y: -3.5}
+        - {x: 9, y: 3.5}
+    - name: enemy_camel_12
+      rect:
+        serializedVersion: 2
+        x: 280
+        y: 0
+        width: 70
+        height: 33
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -5, y: 3.5}
+        - {x: -8, y: 2.5}
+        - {x: -16, y: -5.5}
+        - {x: -16, y: -10.5}
+        - {x: -14, y: -16.5}
+        - {x: 13, y: -16.5}
+        - {x: 16, y: -10.5}
+        - {x: 16, y: -4.5}
+        - {x: 6, y: 3.5}
+    - name: enemy_camel_13
+      rect:
+        serializedVersion: 2
+        x: 350
+        y: 0
+        width: 70
+        height: 33
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 3, y: 3.5}
+        - {x: -7, y: 3.5}
+        - {x: -13, y: 0.5}
+        - {x: -16, y: -6.5}
+        - {x: -16, y: -10.5}
+        - {x: -11, y: -15.5}
+        - {x: -5, y: -16.5}
+        - {x: 16, y: -16.5}
+        - {x: 20, y: -14.5}
+        - {x: 20, y: -7.5}
+        - {x: 14, y: -0.5}
+    - name: enemy_camel_14
+      rect:
+        serializedVersion: 2
+        x: 420
+        y: 0
+        width: 70
+        height: 33
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -11, y: 3.5}
+        - {x: -16, y: -3.5}
+        - {x: -16, y: -13.5}
+        - {x: -12, y: -16.5}
+        - {x: 14, y: -16.5}
+        - {x: 18, y: -12.5}
+        - {x: 18, y: -6.5}
+        - {x: 3, y: 3.5}
+    outline: []
+  spritePackingTag: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
