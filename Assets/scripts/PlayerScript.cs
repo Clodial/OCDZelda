@@ -12,10 +12,10 @@ public class PlayerScript : MonoBehaviour
     private int direction = 0;
     private int dirCt = 0;
     private int locked = 0;
-    public int health = 10;
+    public int health = 7;
     private int hit = 0;
     private int invuln = 0;
-    private int weapon = 0;
+    private int weapon = 1;
     private int bowCt = 0;
     private Vector3 enemyPos;
     private Animator animator;
@@ -26,17 +26,20 @@ public class PlayerScript : MonoBehaviour
     private Renderer rend1;      //Sword Renderer
     private Renderer rend2;      //Bow Renderer
     private Renderer rend3;      //Spear Renderer
+    private Component healthBar;
     
 	// Use this for initialization
 	void Start()
     {
         animator = this.GetComponent<Animator>();
+        animator.SetInteger("Weapon", 1);
         sword = transform.GetChild(0).gameObject;
         bow = transform.GetChild(1).gameObject;
         spear = transform.GetChild(2).gameObject;
         rend1 = sword.GetComponent<Renderer>();
         rend2 = bow.GetComponent<Renderer>();
         rend3 = spear.GetComponent<Renderer>();
+        healthBar = GameObject.Find("Health Bar").GetComponent("HealthBarScript");
         for (int i = 0; i < 8; i++)
             dashCt[i] = 0;
 	}
@@ -49,6 +52,7 @@ public class PlayerScript : MonoBehaviour
         float accel = 0.5f;
         float decel = 0.4f;
 
+        //Various Counters
         if (dirCt > 0) dirCt--;
         for (int i = 0; i < 8; i++)
             if (dashCt[i] > 0) dashCt[i]--;
@@ -63,7 +67,7 @@ public class PlayerScript : MonoBehaviour
             //Basic Movement
             if (Input.GetKey("w") && !Input.GetKey("d") && !Input.GetKey("s") && !Input.GetKey("a") && dirCt == 0)
             {
-                if (Input.GetKeyDown("w") && dashCd == 0)
+                if (Input.GetKeyDown("w") && dashCd == 0)   //Up
                 {
                     if (dashCt[0] > 0)
                     {
@@ -83,7 +87,7 @@ public class PlayerScript : MonoBehaviour
             }
             if (Input.GetKey("d") && !Input.GetKey("w") && !Input.GetKey("s") && !Input.GetKey("a") && dirCt == 0)
             {
-                if (Input.GetKeyDown("d") && dashCd == 0)
+                if (Input.GetKeyDown("d") && dashCd == 0)   //Right
                 {
                     if (dashCt[2] > 0)
                     {
@@ -103,7 +107,7 @@ public class PlayerScript : MonoBehaviour
             }
             if (Input.GetKey("s") && !Input.GetKey("d") && !Input.GetKey("w") && !Input.GetKey("a") && dirCt == 0)
             {
-                if (Input.GetKeyDown("s") && dashCd == 0)
+                if (Input.GetKeyDown("s") && dashCd == 0)   //Down
                 {
                     if (dashCt[4] > 0)
                     {
@@ -123,7 +127,7 @@ public class PlayerScript : MonoBehaviour
             }
             if (Input.GetKey("a") && !Input.GetKey("d") && !Input.GetKey("s") && !Input.GetKey("w") && dirCt == 0)
             {
-                if (Input.GetKeyDown("a") && dashCd == 0)
+                if (Input.GetKeyDown("a") && dashCd == 0)   //Left
                 {
                     if (dashCt[6] > 0)
                     {
@@ -145,7 +149,7 @@ public class PlayerScript : MonoBehaviour
             //Diagonal Movement
             if (Input.GetKey("d") && Input.GetKey("w") && !Input.GetKey("a") && !Input.GetKey("s"))
             {
-                if ((Input.GetKeyDown("d") || Input.GetKeyDown("w")) && dashCd == 0)
+                if ((Input.GetKeyDown("d") || Input.GetKeyDown("w")) && dashCd == 0)    //Up/Right
                 {
                     if (dashCt[1] > 0)
                     {
@@ -174,7 +178,7 @@ public class PlayerScript : MonoBehaviour
             }
             if (Input.GetKey("d") && Input.GetKey("s") && !Input.GetKey("a") && !Input.GetKey("w"))
             {
-                if ((Input.GetKeyDown("d") || Input.GetKeyDown("s")) && dashCd == 0)
+                if ((Input.GetKeyDown("d") || Input.GetKeyDown("s")) && dashCd == 0)    //Down/Right
                 {
                     if (dashCt[3] > 0)
                     {
@@ -203,7 +207,7 @@ public class PlayerScript : MonoBehaviour
             }
             if (Input.GetKey("a") && Input.GetKey("s") && !Input.GetKey("d") && !Input.GetKey("w"))
             {
-                if ((Input.GetKeyDown("a") || Input.GetKeyDown("s")) && dashCd == 0)
+                if ((Input.GetKeyDown("a") || Input.GetKeyDown("s")) && dashCd == 0)    //Down/Left
                 {
                     if (dashCt[5] > 0)
                     {
@@ -232,7 +236,7 @@ public class PlayerScript : MonoBehaviour
             }
             if (Input.GetKey("a") && Input.GetKey("w") && !Input.GetKey("d") && !Input.GetKey("s"))
             {
-                if ((Input.GetKeyDown("a") || Input.GetKeyDown("w")) && dashCd == 0)
+                if ((Input.GetKeyDown("a") || Input.GetKeyDown("w")) && dashCd == 0)    //Up/Left
                 {
                     if (dashCt[7] > 0)
                     {
@@ -271,6 +275,34 @@ public class PlayerScript : MonoBehaviour
         {
             if (moveSpeed > 0) moveSpeed -= decel;
             if (moveSpeed < 0) moveSpeed = 0;
+        }
+
+        //Switch Weapon
+        if (Input.GetKeyDown("space"))
+        {
+            if (locked == 0) weapon = (weapon % 3) + 1;
+
+            switch (weapon)
+            { 
+                case 1:
+                    rend1.enabled = true;
+                    rend2.enabled = false;
+                    rend3.enabled = false;
+                    animator.SetInteger("Weapon", 1);
+                    break;
+                case 2:
+                    rend1.enabled = false;
+                    rend2.enabled = true;
+                    rend3.enabled = false;
+                    animator.SetInteger("Weapon", 2);
+                    break;
+                case 3:
+                    rend1.enabled = false;
+                    rend2.enabled = false;
+                    rend3.enabled = true;
+                    animator.SetInteger("Weapon", 3);
+                    break;
+            }
         }
 
         //Attack
@@ -316,6 +348,7 @@ public class PlayerScript : MonoBehaviour
         if(hit == 1)
         {
             health--;
+            healthBar.SendMessage("SetHealth", health);
             invuln = 30;
             hit = 0;
             dash = 1;
@@ -324,6 +357,7 @@ public class PlayerScript : MonoBehaviour
             ySpeed = transform.position.y - enemyPos.y;
         }
 
+        //Movement
         transform.Translate(moveSpeed * xSpeed * dash * Time.deltaTime, moveSpeed * ySpeed * dash * Time.deltaTime, 0, Space.World);
         if (moveSpeed > 0) animator.SetFloat("Moving", 1);
         else animator.SetFloat("Moving", 0);
@@ -340,34 +374,12 @@ public class PlayerScript : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "Weapon")
+        if (other.gameObject.tag == "Health")
         {
-            if (other.name == "sword")
-            {
-                weapon = 1;
-                rend1.enabled = true;
-                rend2.enabled = false;
-                rend3.enabled = false;
-                animator.SetInteger("Weapon", 1);
-            }
-            if (other.name == "bow")
-            {
-                weapon = 2;
-                rend1.enabled = false;
-                rend2.enabled = true;
-                rend3.enabled = false;
-                animator.SetInteger("Weapon", 2);
-            }
-            if (other.name == "spear")
-            {
-                weapon = 3;
-                rend1.enabled = false;
-                rend2.enabled = false;
-                rend3.enabled = true;
-                animator.SetInteger("Weapon", 3);
-            }
+            if(health < 7)health++;
+            healthBar.SendMessage("SetHealth", health);
+            DestroyObject(other.gameObject);
         }
-        else moveSpeed = 0;
     }
 }
 

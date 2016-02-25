@@ -52,4 +52,12 @@ public class ArrowScript : MonoBehaviour
             DestroyObject(gameObject);
         }
     }
+
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.tag == "Enemy")
+        {
+            DestroyObject(gameObject);
+        }
+    }
 }
