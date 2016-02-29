@@ -11,6 +11,8 @@ public class EnemyCamelScript : MonoBehaviour
     private Animator animator;
     private Vector3 player;
     private Vector3 newScale;
+    public Transform pickup;
+    public Transform poof;
     
 	// Use this for initialization
 	void Start () 
@@ -72,6 +74,13 @@ public class EnemyCamelScript : MonoBehaviour
     void OnTriggerEnter(Collider other)
     {
         if (other.tag == "Attack")
+        {
             DestroyObject(gameObject);
+            Transform clone1 = Instantiate(poof, transform.position, transform.rotation) as Transform;
+            if (Random.Range(0, 127) > 96)
+            {
+                Transform clone2 = Instantiate(pickup, transform.position, transform.rotation) as Transform;
+            }
+        }
     }
 }
