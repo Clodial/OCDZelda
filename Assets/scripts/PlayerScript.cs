@@ -6,9 +6,6 @@ public class PlayerScript : MonoBehaviour
     public float moveSpeed = 0;
     private float xSpeed = 0;
     private float ySpeed = 0;
-    private int[] dashCt = new int[8];
-    private float dash = 1;
-    private int dashCd = 0;
     private int direction = 0;
     private int dirCt = 0;
     private int locked = 0;
@@ -40,24 +37,17 @@ public class PlayerScript : MonoBehaviour
         rend2 = bow.GetComponent<Renderer>();
         rend3 = spear.GetComponent<Renderer>();
         healthBar = GameObject.Find("Health Bar").GetComponent("HealthBarScript");
-        for (int i = 0; i < 8; i++)
-            dashCt[i] = 0;
 	}
 
     // Update is called once per frame
     void Update()
     {
-        float maxSpeed = 4;
-        float maxDash = 3.7f;
+        float maxSpeed = 5;
         float accel = 0.5f;
         float decel = 0.4f;
 
         //Various Counters
         if (dirCt > 0) dirCt--;
-        for (int i = 0; i < 8; i++)
-            if (dashCt[i] > 0) dashCt[i]--;
-        if (dash > 1) dash -= 0.1f;
-        if (dashCd > 0) dashCd--;
         if (invuln > 0) invuln--;
         if (bowCt > 0) bowCt--;
         
@@ -65,17 +55,8 @@ public class PlayerScript : MonoBehaviour
         if (invuln <= 15)
         {
             //Basic Movement
-            if (Input.GetKey("w") && !Input.GetKey("d") && !Input.GetKey("s") && !Input.GetKey("a") && dirCt == 0)
+            if (Input.GetKey("w") && !Input.GetKey("d") && !Input.GetKey("s") && !Input.GetKey("a")) //Up
             {
-                if (Input.GetKeyDown("w") && dashCd == 0)   //Up
-                {
-                    if (dashCt[0] > 0)
-                    {
-                        dash = maxDash;
-                        dashCd = 30;
-                    }
-                    dashCt[0] = 12;
-                }
                 if (moveSpeed < maxSpeed) moveSpeed += accel;
                 xSpeed = 0;
                 ySpeed = 1;
@@ -85,17 +66,8 @@ public class PlayerScript : MonoBehaviour
                     animator.SetInteger("Direction", 0);
                 }
             }
-            if (Input.GetKey("d") && !Input.GetKey("w") && !Input.GetKey("s") && !Input.GetKey("a") && dirCt == 0)
+            if (Input.GetKey("d") && !Input.GetKey("w") && !Input.GetKey("s") && !Input.GetKey("a")) //Right
             {
-                if (Input.GetKeyDown("d") && dashCd == 0)   //Right
-                {
-                    if (dashCt[2] > 0)
-                    {
-                        dash = maxDash;
-                        dashCd = 30;
-                    }
-                    dashCt[2] = 12;
-                }
                 if (moveSpeed < maxSpeed) moveSpeed += accel;
                 xSpeed = 1;
                 ySpeed = 0;
@@ -105,17 +77,8 @@ public class PlayerScript : MonoBehaviour
                     animator.SetInteger("Direction", 1);
                 }
             }
-            if (Input.GetKey("s") && !Input.GetKey("d") && !Input.GetKey("w") && !Input.GetKey("a") && dirCt == 0)
+            if (Input.GetKey("s") && !Input.GetKey("d") && !Input.GetKey("w") && !Input.GetKey("a")) //Down
             {
-                if (Input.GetKeyDown("s") && dashCd == 0)   //Down
-                {
-                    if (dashCt[4] > 0)
-                    {
-                        dash = maxDash;
-                        dashCd = 30;
-                    }
-                    dashCt[4] = 12;
-                }
                 if (moveSpeed < maxSpeed) moveSpeed += accel;
                 xSpeed = 0;
                 ySpeed = -1;
@@ -125,17 +88,8 @@ public class PlayerScript : MonoBehaviour
                     animator.SetInteger("Direction", 2);
                 }
             }
-            if (Input.GetKey("a") && !Input.GetKey("d") && !Input.GetKey("s") && !Input.GetKey("w") && dirCt == 0)
+            if (Input.GetKey("a") && !Input.GetKey("d") && !Input.GetKey("s") && !Input.GetKey("w")) //Left
             {
-                if (Input.GetKeyDown("a") && dashCd == 0)   //Left
-                {
-                    if (dashCt[6] > 0)
-                    {
-                        dash = maxDash;
-                        dashCd = 30;
-                    }
-                    dashCt[6] = 12;
-                }
                 if (moveSpeed < maxSpeed) moveSpeed += accel;
                 xSpeed = -1;
                 ySpeed = 0;
@@ -147,17 +101,8 @@ public class PlayerScript : MonoBehaviour
             }
 
             //Diagonal Movement
-            if (Input.GetKey("d") && Input.GetKey("w") && !Input.GetKey("a") && !Input.GetKey("s"))
+            if (Input.GetKey("d") && Input.GetKey("w") && !Input.GetKey("a") && !Input.GetKey("s")) //Up/Right
             {
-                if ((Input.GetKeyDown("d") || Input.GetKeyDown("w")) && dashCd == 0)    //Up/Right
-                {
-                    if (dashCt[1] > 0)
-                    {
-                        dash = maxDash;
-                        dashCd = 30;
-                    }
-                    dashCt[1] = 10;
-                }
                 if (moveSpeed < maxSpeed) moveSpeed += accel;
                 xSpeed = 1 / Mathf.Sqrt(2);
                 ySpeed = 1 / Mathf.Sqrt(2);
@@ -176,17 +121,8 @@ public class PlayerScript : MonoBehaviour
                 }
                 dirCt = 5;
             }
-            if (Input.GetKey("d") && Input.GetKey("s") && !Input.GetKey("a") && !Input.GetKey("w"))
+            if (Input.GetKey("d") && Input.GetKey("s") && !Input.GetKey("a") && !Input.GetKey("w")) //Down/Right
             {
-                if ((Input.GetKeyDown("d") || Input.GetKeyDown("s")) && dashCd == 0)    //Down/Right
-                {
-                    if (dashCt[3] > 0)
-                    {
-                        dash = maxDash;
-                        dashCd = 30;
-                    }
-                    dashCt[3] = 10;
-                }
                 if (moveSpeed < maxSpeed) moveSpeed += accel;
                 xSpeed = 1 / Mathf.Sqrt(2);
                 ySpeed = -1 / Mathf.Sqrt(2);
@@ -205,17 +141,8 @@ public class PlayerScript : MonoBehaviour
                 }
                 dirCt = 5;
             }
-            if (Input.GetKey("a") && Input.GetKey("s") && !Input.GetKey("d") && !Input.GetKey("w"))
+            if (Input.GetKey("a") && Input.GetKey("s") && !Input.GetKey("d") && !Input.GetKey("w")) //Down/Left
             {
-                if ((Input.GetKeyDown("a") || Input.GetKeyDown("s")) && dashCd == 0)    //Down/Left
-                {
-                    if (dashCt[5] > 0)
-                    {
-                        dash = maxDash;
-                        dashCd = 30;
-                    }
-                    dashCt[5] = 10;
-                }
                 if (moveSpeed < maxSpeed) moveSpeed += accel;
                 xSpeed = -1 / Mathf.Sqrt(2);
                 ySpeed = -1 / Mathf.Sqrt(2);
@@ -234,17 +161,8 @@ public class PlayerScript : MonoBehaviour
                 }
                 dirCt = 5;
             }
-            if (Input.GetKey("a") && Input.GetKey("w") && !Input.GetKey("d") && !Input.GetKey("s"))
+            if (Input.GetKey("a") && Input.GetKey("w") && !Input.GetKey("d") && !Input.GetKey("s")) //Up/Left
             {
-                if ((Input.GetKeyDown("a") || Input.GetKeyDown("w")) && dashCd == 0)    //Up/Left
-                {
-                    if (dashCt[7] > 0)
-                    {
-                        dash = maxDash;
-                        dashCd = 30;
-                    }
-                    dashCt[7] = 10;
-                }
                 if (moveSpeed < maxSpeed) moveSpeed += accel;
                 xSpeed = -1 / Mathf.Sqrt(2);
                 ySpeed = 1 / Mathf.Sqrt(2);
@@ -334,7 +252,7 @@ public class PlayerScript : MonoBehaviour
                 animator.SetInteger("Attack", 1);
                 spear.tag = "Attack";
             }
-            dirCt = 12;
+            dirCt = 25;
         }
 
         if (animator.GetInteger("Attack") == -1)
@@ -350,15 +268,15 @@ public class PlayerScript : MonoBehaviour
             health--;
             healthBar.SendMessage("SetHealth", health);
             invuln = 30;
-            hit = 0;
-            dash = 1;
-            moveSpeed = 10;
+            moveSpeed = 6;
             xSpeed = transform.position.x - enemyPos.x;
             ySpeed = transform.position.y - enemyPos.y;
+            hit = 0;
         }
 
         //Movement
-        transform.Translate(moveSpeed * xSpeed * dash * Time.deltaTime, moveSpeed * ySpeed * dash * Time.deltaTime, 0, Space.World);
+        transform.Translate(moveSpeed * xSpeed * Time.deltaTime, moveSpeed * ySpeed * Time.deltaTime, 0, Space.World);
+        
         if (moveSpeed > 0) animator.SetFloat("Moving", 1);
         else animator.SetFloat("Moving", 0);
 	}

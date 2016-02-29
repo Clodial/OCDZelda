@@ -17,7 +17,7 @@ public class ArrowScript : MonoBehaviour
     void Set(int direction)
     {
         dir = direction;
-        moveSpeed = 8;
+        moveSpeed = 10;
     }
 	
 	// Update is called once per frame
@@ -42,7 +42,7 @@ public class ArrowScript : MonoBehaviour
                 break;
         }
         time++;
-        if (time > 200) DestroyObject(gameObject);
+        if (time > 300) DestroyObject(gameObject);
 	}
 
     void OnCollisionEnter(Collision other)
