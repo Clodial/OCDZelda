@@ -6,29 +6,42 @@ public class EnemyRockScript : MonoBehaviour {
     private float moveSpeed = 0.1f;
     private int direction = -1;
     private int ct = 0;
+    public int room;
+    private int currentRoom;
+    private int changeRoom;
     private Animator animator;
     public Transform pickup;
     public Transform poof;
     private Transform clone1;
     private Transform clone2;
+    private GameObject gameData;
 
 	// Use this for initialization
-	void Start () {
+	void Start () 
+    {
         animator = this.GetComponent<Animator>();
+        gameData = GameObject.Find("GameData");
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	void Update () 
+    {
+        GameDataScript gameDataScript = gameData.GetComponent<GameDataScript>();
+        currentRoom = gameDataScript.roomNum;
+        changeRoom = gameDataScript.changeRoom;
 
-        if (ct == 0)
+        if (currentRoom == room && changeRoom == 0)
         {
-            direction *= -1;
-            animator.SetInteger("Direction", direction);
-            ct = Random.Range(270, 330);
-        }
-        else ct--;
+            if (ct == 0)
+            {
+                direction *= -1;
+                animator.SetInteger("Direction", direction);
+                ct = Random.Range(270, 330);
+            }
+            else ct--;
 
-        transform.Translate(moveSpeed * direction * Time.deltaTime, 0, 0, Space.World);
+            transform.Translate(moveSpeed * direction * Time.deltaTime, 0, 0, Space.World);
+        }
 	}
 
     void OnTriggerEnter(Collider other)

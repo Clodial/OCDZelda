@@ -29,7 +29,7 @@ public class CameraScript : MonoBehaviour
 
         if (changeRoom == 0)
         {
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < 16; i++)
             {
                 if (player.x > transform.position.x + 0.4 && rCheck == 0) moveX = 1;
                 else if (player.x < transform.position.x - 0.4 && lCheck == 0) moveX = -1;
