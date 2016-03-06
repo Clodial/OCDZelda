@@ -17,7 +17,7 @@ public class ArrowScript : MonoBehaviour
     void Set(int direction)
     {
         dir = direction;
-        moveSpeed = 10;
+        moveSpeed = 2;
     }
 	
 	// Update is called once per frame
@@ -55,7 +55,7 @@ public class ArrowScript : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "Enemy")
+        if (other.gameObject.tag == "Enemy" || other.gameObject.tag == "Wall")
         {
             DestroyObject(gameObject);
         }
