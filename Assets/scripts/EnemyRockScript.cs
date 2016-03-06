@@ -3,12 +3,14 @@ using System.Collections;
 
 public class EnemyRockScript : MonoBehaviour {
 
-    private float moveSpeed = 0.5f;
+    private float moveSpeed = 0.1f;
     private int direction = -1;
     private int ct = 0;
     private Animator animator;
     public Transform pickup;
     public Transform poof;
+    private Transform clone1;
+    private Transform clone2;
 
 	// Use this for initialization
 	void Start () {
@@ -34,10 +36,12 @@ public class EnemyRockScript : MonoBehaviour {
         if (other.tag == "Attack")
         {
             DestroyObject(gameObject);
-            Transform clone1 = Instantiate(poof, transform.position, transform.rotation) as Transform;
-            if (Random.Range(0, 127) > 32)
+            clone1 = Instantiate(poof, transform.position, transform.rotation) as Transform;
+            clone1.Translate(0, 0, 0);
+            if (Random.Range(0, 99) > 33)
             {
-                Transform clone2 = Instantiate(pickup, transform.position, transform.rotation) as Transform;
+                clone2 = Instantiate(pickup, transform.position, transform.rotation) as Transform;
+                clone2.Translate(0, 0, 0);
             }
         }
     }

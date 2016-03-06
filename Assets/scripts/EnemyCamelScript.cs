@@ -4,7 +4,7 @@ using System.Collections;
 public class EnemyCamelScript : MonoBehaviour 
 {
 
-    private float moveSpeed = 1.5f;
+    private float moveSpeed = .3f;
     public float px, py, pz, hyp;
     public int state = 0;
     public int ct = 30;
@@ -13,6 +13,8 @@ public class EnemyCamelScript : MonoBehaviour
     private Vector3 newScale;
     public Transform pickup;
     public Transform poof;
+    private Transform clone1;
+    private Transform clone2;
     
 	// Use this for initialization
 	void Start () 
@@ -76,10 +78,12 @@ public class EnemyCamelScript : MonoBehaviour
         if (other.tag == "Attack")
         {
             DestroyObject(gameObject);
-            Transform clone1 = Instantiate(poof, transform.position, transform.rotation) as Transform;
-            if (Random.Range(0, 127) > 96)
+            clone1 = Instantiate(poof, transform.position, transform.rotation) as Transform;
+            clone1.Translate(0, 0, 0);
+            if (Random.Range(0, 99) > 79)
             {
-                Transform clone2 = Instantiate(pickup, transform.position, transform.rotation) as Transform;
+                clone2 = Instantiate(pickup, transform.position, transform.rotation) as Transform;
+                clone2.Translate(0, 0, 0);
             }
         }
     }

@@ -3,18 +3,23 @@ using System.Collections;
 
 public class EnemyRoombaScript : MonoBehaviour 
 {
-    public int moveSpeed;
+    public float enemy;
+    private float moveSpeed;
     public int direction;
     private int walkCt = 0;
     public int collCt = 0;
     private Animator animator;
     public Transform pickup;
     public Transform poof;
+    private Transform clone1;
+    private Transform clone2;
 
 	// Use this for initialization
 	void Start () 
     {
         animator = this.GetComponent<Animator>();
+        if (enemy == 0) moveSpeed = 0.4f;
+        else moveSpeed = 0.6f;
 	}
 	
 	// Update is called once per frame
@@ -53,16 +58,18 @@ public class EnemyRoombaScript : MonoBehaviour
         if (other.tag == "Attack")
         {
             DestroyObject(gameObject);
-            Transform clone1 = Instantiate(poof, transform.position, transform.rotation) as Transform;
-            if (Random.Range(0, 127) > 80)
+            clone1 = Instantiate(poof, transform.position, transform.rotation) as Transform;
+            clone1.Translate(0, 0, 0);
+            if (Random.Range(0, 99) > 69)
             {
-                Transform clone2 = Instantiate(pickup, transform.position, transform.rotation) as Transform;
+                clone2 = Instantiate(pickup, transform.position, transform.rotation) as Transform;
+                clone2.Translate(0, 0, 0);
             }
         }
 
         direction += 2;
         if (direction > 3) direction -= 4;
-        collCt += (10 * moveSpeed);
+        collCt += 10;
         animator.SetInteger("Direction", direction);
     }
 
@@ -72,7 +79,7 @@ public class EnemyRoombaScript : MonoBehaviour
         {
             direction += 2;
             if (direction > 3) direction -= 4;
-            if(coll.gameObject.tag == "Wall")collCt += (10 * moveSpeed);
+            if(coll.gameObject.tag == "Wall")collCt += 10;
             animator.SetInteger("Direction", direction);
         }
     }

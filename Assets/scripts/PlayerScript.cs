@@ -3,7 +3,7 @@ using System.Collections;
 
 public class PlayerScript : MonoBehaviour
 {
-    public float moveSpeed = 0;
+    private float moveSpeed = 0;
     private float xSpeed = 0;
     private float ySpeed = 0;
     private int direction = 0;
@@ -14,16 +14,21 @@ public class PlayerScript : MonoBehaviour
     private int invuln = 0;
     private int weapon = 1;
     private int bowCt = 0;
+    private int changeRoom;
+    private int changeDir;
     private Vector3 enemyPos;
     private Animator animator;
     private GameObject sword;
     private GameObject bow;
     private GameObject spear;
     public Transform prefab;
+    private Transform clone;
+    public Transform death;
     private Renderer rend1;      //Sword Renderer
     private Renderer rend2;      //Bow Renderer
     private Renderer rend3;      //Spear Renderer
     private Component healthBar;
+    private GameObject gameData;
     
 	// Use this for initialization
 	void Start()
@@ -37,12 +42,13 @@ public class PlayerScript : MonoBehaviour
         rend2 = bow.GetComponent<Renderer>();
         rend3 = spear.GetComponent<Renderer>();
         healthBar = GameObject.Find("Health Bar").GetComponent("HealthBarScript");
+        gameData = GameObject.Find("GameData");
 	}
 
     // Update is called once per frame
     void Update()
     {
-        float maxSpeed = 5;
+        float maxSpeed = 1;
         float accel = 0.5f;
         float decel = 0.4f;
 
@@ -50,235 +56,262 @@ public class PlayerScript : MonoBehaviour
         if (dirCt > 0) dirCt--;
         if (invuln > 0) invuln--;
         if (bowCt > 0) bowCt--;
-        
-        
-        if (invuln <= 15)
+
+        GameDataScript gameDataScript = gameData.GetComponent<GameDataScript>();
+        changeRoom = gameDataScript.changeRoom;
+        changeDir = gameDataScript.changeDir;
+
+        if (changeRoom == 0)
         {
-            //Basic Movement
-            if (Input.GetKey("w") && !Input.GetKey("d") && !Input.GetKey("s") && !Input.GetKey("a")) //Up
+            if (invuln <= 15)
             {
-                if (moveSpeed < maxSpeed) moveSpeed += accel;
-                xSpeed = 0;
-                ySpeed = 1;
-                if (dirCt <= 0 && locked == 0)
+                //Basic Movement
+                if (Input.GetKey("w") && !Input.GetKey("d") && !Input.GetKey("s") && !Input.GetKey("a")) //Up
                 {
-                    direction = 0;
-                    animator.SetInteger("Direction", 0);
+                    if (moveSpeed < maxSpeed) moveSpeed += accel;
+                    if (moveSpeed > maxSpeed) moveSpeed = maxSpeed;
+                    xSpeed = 0;
+                    ySpeed = 1;
+                    if (dirCt <= 0 && locked == 0)
+                    {
+                        direction = 0;
+                        animator.SetInteger("Direction", 0);
+                    }
+                }
+                if (Input.GetKey("d") && !Input.GetKey("w") && !Input.GetKey("s") && !Input.GetKey("a")) //Right
+                {
+                    if (moveSpeed < maxSpeed) moveSpeed += accel;
+                    if (moveSpeed > maxSpeed) moveSpeed = maxSpeed;
+                    xSpeed = 1;
+                    ySpeed = 0;
+                    if (dirCt <= 0 && locked == 0)
+                    {
+                        direction = 1;
+                        animator.SetInteger("Direction", 1);
+                    }
+                }
+                if (Input.GetKey("s") && !Input.GetKey("d") && !Input.GetKey("w") && !Input.GetKey("a")) //Down
+                {
+                    if (moveSpeed < maxSpeed) moveSpeed += accel;
+                    if (moveSpeed > maxSpeed) moveSpeed = maxSpeed;
+                    xSpeed = 0;
+                    ySpeed = -1;
+                    if (dirCt <= 0 && locked == 0)
+                    {
+                        direction = 2;
+                        animator.SetInteger("Direction", 2);
+                    }
+                }
+                if (Input.GetKey("a") && !Input.GetKey("d") && !Input.GetKey("s") && !Input.GetKey("w")) //Left
+                {
+                    if (moveSpeed < maxSpeed) moveSpeed += accel;
+                    if (moveSpeed > maxSpeed) moveSpeed = maxSpeed;
+                    xSpeed = -1;
+                    ySpeed = 0;
+                    if (dirCt <= 0 && locked == 0)
+                    {
+                        direction = 3;
+                        animator.SetInteger("Direction", 3);
+                    }
+                }
+
+                //Diagonal Movement
+                if (Input.GetKey("d") && Input.GetKey("w") && !Input.GetKey("a") && !Input.GetKey("s")) //Up/Right
+                {
+                    if (moveSpeed < maxSpeed) moveSpeed += accel;
+                    if (moveSpeed > maxSpeed) moveSpeed = maxSpeed;
+                    xSpeed = 1 / Mathf.Sqrt(2);
+                    ySpeed = 1 / Mathf.Sqrt(2);
+                    if (dirCt <= 0 && locked == 0)
+                    {
+                        if (direction == 0 || direction == 3)
+                        {
+                            direction = 0;
+                            animator.SetInteger("Direction", 0);
+                        }
+                        else
+                        {
+                            direction = 1;
+                            animator.SetInteger("Direction", 1);
+                        }
+                    }
+                    dirCt = 5;
+                }
+                if (Input.GetKey("d") && Input.GetKey("s") && !Input.GetKey("a") && !Input.GetKey("w")) //Down/Right
+                {
+                    if (moveSpeed < maxSpeed) moveSpeed += accel;
+                    if (moveSpeed > maxSpeed) moveSpeed = maxSpeed;
+                    xSpeed = 1 / Mathf.Sqrt(2);
+                    ySpeed = -1 / Mathf.Sqrt(2);
+                    if (dirCt <= 0 && locked == 0)
+                    {
+                        if (direction == 1 || direction == 0)
+                        {
+                            direction = 1;
+                            animator.SetInteger("Direction", 1);
+                        }
+                        else
+                        {
+                            direction = 2;
+                            animator.SetInteger("Direction", 2);
+                        }
+                    }
+                    dirCt = 5;
+                }
+                if (Input.GetKey("a") && Input.GetKey("s") && !Input.GetKey("d") && !Input.GetKey("w")) //Down/Left
+                {
+                    if (moveSpeed < maxSpeed) moveSpeed += accel;
+                    if (moveSpeed > maxSpeed) moveSpeed = maxSpeed;
+                    xSpeed = -1 / Mathf.Sqrt(2);
+                    ySpeed = -1 / Mathf.Sqrt(2);
+                    if (dirCt <= 0 && locked == 0)
+                    {
+                        if (direction == 2 || direction == 1)
+                        {
+                            direction = 2;
+                            animator.SetInteger("Direction", 2);
+                        }
+                        else
+                        {
+                            direction = 3;
+                            animator.SetInteger("Direction", 3);
+                        }
+                    }
+                    dirCt = 5;
+                }
+                if (Input.GetKey("a") && Input.GetKey("w") && !Input.GetKey("d") && !Input.GetKey("s")) //Up/Left
+                {
+                    if (moveSpeed < maxSpeed) moveSpeed += accel;
+                    if (moveSpeed > maxSpeed) moveSpeed = maxSpeed;
+                    xSpeed = -1 / Mathf.Sqrt(2);
+                    ySpeed = 1 / Mathf.Sqrt(2);
+                    if (dirCt <= 0 && locked == 0)
+                    {
+                        if (direction == 3 || direction == 2)
+                        {
+                            direction = 3;
+                            animator.SetInteger("Direction", 3);
+                        }
+                        else
+                        {
+                            direction = 0;
+                            animator.SetInteger("Direction", 0);
+                        }
+                    }
+                    dirCt = 5;
                 }
             }
-            if (Input.GetKey("d") && !Input.GetKey("w") && !Input.GetKey("s") && !Input.GetKey("a")) //Right
+            else
             {
-                if (moveSpeed < maxSpeed) moveSpeed += accel;
-                xSpeed = 1;
-                ySpeed = 0;
-                if (dirCt <= 0 && locked == 0)
-                {
-                    direction = 1;
-                    animator.SetInteger("Direction", 1);
-                }
+                if (moveSpeed > 0) moveSpeed -= decel;
+                if (moveSpeed < 0) moveSpeed = 0;
             }
-            if (Input.GetKey("s") && !Input.GetKey("d") && !Input.GetKey("w") && !Input.GetKey("a")) //Down
+
+            //Idle
+            if (!Input.GetKey("a") && !Input.GetKey("w") && !Input.GetKey("d") && !Input.GetKey("s"))
             {
-                if (moveSpeed < maxSpeed) moveSpeed += accel;
-                xSpeed = 0;
-                ySpeed = -1;
-                if (dirCt <= 0 && locked == 0)
-                { 
-                    direction = 2;
-                    animator.SetInteger("Direction", 2);
-                }
+                if (moveSpeed > 0) moveSpeed -= decel;
+                if (moveSpeed < 0) moveSpeed = 0;
             }
-            if (Input.GetKey("a") && !Input.GetKey("d") && !Input.GetKey("s") && !Input.GetKey("w")) //Left
+
+            //Switch Weapon
+            if (Input.GetKeyDown("space"))
             {
-                if (moveSpeed < maxSpeed) moveSpeed += accel;
-                xSpeed = -1;
-                ySpeed = 0;
-                if (dirCt <= 0 && locked == 0)
+                if (locked == 0) weapon = (weapon % 3) + 1;
+
+                switch (weapon)
                 {
-                    direction = 3;
-                    animator.SetInteger("Direction", 3);
+                    case 1:
+                        rend1.enabled = true;
+                        rend2.enabled = false;
+                        rend3.enabled = false;
+                        animator.SetInteger("Weapon", 1);
+                        break;
+                    case 2:
+                        rend1.enabled = false;
+                        rend2.enabled = true;
+                        rend3.enabled = false;
+                        animator.SetInteger("Weapon", 2);
+                        break;
+                    case 3:
+                        rend1.enabled = false;
+                        rend2.enabled = false;
+                        rend3.enabled = true;
+                        animator.SetInteger("Weapon", 3);
+                        break;
                 }
             }
 
-            //Diagonal Movement
-            if (Input.GetKey("d") && Input.GetKey("w") && !Input.GetKey("a") && !Input.GetKey("s")) //Up/Right
+            //Attack
+            if (Input.GetKeyDown("p"))
             {
-                if (moveSpeed < maxSpeed) moveSpeed += accel;
-                xSpeed = 1 / Mathf.Sqrt(2);
-                ySpeed = 1 / Mathf.Sqrt(2);
-                if (dirCt <= 0 && locked == 0)
+                locked = 1;
+                if (weapon == 2) animator.SetInteger("Attack", 1);
+            }
+            if (Input.GetKeyUp("p"))
+            {
+                locked = 0;
+                if (weapon == 1)
                 {
-                    if (direction == 0 || direction == 3)
+                    animator.SetInteger("Attack", 1);
+                    sword.tag = "Attack";
+                }
+                if (weapon == 2)
+                {
+                    animator.SetInteger("Attack", 0);
+                    if (bowCt == 0)
                     {
-                        direction = 0;
-                        animator.SetInteger("Direction", 0);
-                    }
-                    else 
-                    {
-                        direction = 1;
-                        animator.SetInteger("Direction", 1);
+                        clone = Instantiate(prefab, transform.position, transform.rotation) as Transform;
+                        clone.SendMessage("Set", direction);
+                        bowCt = 30;
                     }
                 }
-                dirCt = 5;
-            }
-            if (Input.GetKey("d") && Input.GetKey("s") && !Input.GetKey("a") && !Input.GetKey("w")) //Down/Right
-            {
-                if (moveSpeed < maxSpeed) moveSpeed += accel;
-                xSpeed = 1 / Mathf.Sqrt(2);
-                ySpeed = -1 / Mathf.Sqrt(2);
-                if (dirCt <= 0 && locked == 0)
+                if (weapon == 3)
                 {
-                    if (direction == 1 || direction == 0)
-                    {
-                        direction = 1;
-                        animator.SetInteger("Direction", 1);
-                    }
-                    else
-                    {
-                        direction = 2;
-                        animator.SetInteger("Direction", 2);
-                    }
+                    animator.SetInteger("Attack", 1);
+                    spear.tag = "Attack";
                 }
-                dirCt = 5;
+                dirCt = 25;
             }
-            if (Input.GetKey("a") && Input.GetKey("s") && !Input.GetKey("d") && !Input.GetKey("w")) //Down/Left
+
+            if (animator.GetInteger("Attack") == -1)
             {
-                if (moveSpeed < maxSpeed) moveSpeed += accel;
-                xSpeed = -1 / Mathf.Sqrt(2);
-                ySpeed = -1 / Mathf.Sqrt(2);
-                if (dirCt <= 0 && locked == 0)
-                {
-                    if (direction == 2 || direction == 1)
-                    {
-                        direction = 2;
-                        animator.SetInteger("Direction", 2);
-                    }
-                    else
-                    {
-                        direction = 3;
-                        animator.SetInteger("Direction", 3);
-                    }
-                }
-                dirCt = 5;
+                sword.tag = "Untagged";
+                spear.tag = "Untagged";
+                animator.SetInteger("Attack", 0);
             }
-            if (Input.GetKey("a") && Input.GetKey("w") && !Input.GetKey("d") && !Input.GetKey("s")) //Up/Left
+
+            //Hurt
+            if (hit == 1)
             {
-                if (moveSpeed < maxSpeed) moveSpeed += accel;
-                xSpeed = -1 / Mathf.Sqrt(2);
-                ySpeed = 1 / Mathf.Sqrt(2);
-                if (dirCt <= 0 && locked == 0)
+                health--;
+                healthBar.SendMessage("SetHealth", health);
+
+                if (health <= 0)
                 {
-                    if (direction == 3 || direction == 2)
-                    {
-                        direction = 3;
-                        animator.SetInteger("Direction", 3);
-                    }
-                    else
-                    {
-                        direction = 0;
-                        animator.SetInteger("Direction", 0);
-                    }
+                    DestroyObject(gameObject);
+                    clone = Instantiate(death, transform.position, transform.rotation) as Transform;
                 }
-                dirCt = 5;
+                invuln = 30;
+                moveSpeed = 6;
+                xSpeed = transform.position.x - enemyPos.x;
+                ySpeed = transform.position.y - enemyPos.y;
+                hit = 0;
             }
+
+            //Movement
+            transform.Translate(moveSpeed * xSpeed * Time.deltaTime, moveSpeed * ySpeed * Time.deltaTime, 0, Space.World);
+
+            if (moveSpeed > 0) animator.SetFloat("Moving", 1);
+            else animator.SetFloat("Moving", 0);
         }
         else
         {
-            if (moveSpeed > 0) moveSpeed -= decel;
-            if (moveSpeed < 0) moveSpeed = 0;
+            if (changeDir == 1) transform.Translate(0, 0.7f * Time.deltaTime, 0, Space.World);
+            if (changeDir == 2) transform.Translate(0.5f * Time.deltaTime, 0, 0, Space.World);
+            if (changeDir == 3) transform.Translate(0, -0.5f * Time.deltaTime, 0, Space.World);
+            if (changeDir == 4) transform.Translate(-0.7f * Time.deltaTime, 0, 0, Space.World);
         }
-
-        //Idle
-        if (!Input.GetKey("a") && !Input.GetKey("w") && !Input.GetKey("d") && !Input.GetKey("s"))
-        {
-            if (moveSpeed > 0) moveSpeed -= decel;
-            if (moveSpeed < 0) moveSpeed = 0;
-        }
-
-        //Switch Weapon
-        if (Input.GetKeyDown("space"))
-        {
-            if (locked == 0) weapon = (weapon % 3) + 1;
-
-            switch (weapon)
-            { 
-                case 1:
-                    rend1.enabled = true;
-                    rend2.enabled = false;
-                    rend3.enabled = false;
-                    animator.SetInteger("Weapon", 1);
-                    break;
-                case 2:
-                    rend1.enabled = false;
-                    rend2.enabled = true;
-                    rend3.enabled = false;
-                    animator.SetInteger("Weapon", 2);
-                    break;
-                case 3:
-                    rend1.enabled = false;
-                    rend2.enabled = false;
-                    rend3.enabled = true;
-                    animator.SetInteger("Weapon", 3);
-                    break;
-            }
-        }
-
-        //Attack
-        if (Input.GetKeyDown("p"))
-        {
-            locked = 1;
-            if (weapon == 2) animator.SetInteger("Attack", 1);
-        }
-        if (Input.GetKeyUp("p"))
-        {
-            locked = 0;
-            if (weapon == 1)
-            {
-                animator.SetInteger("Attack", 1);
-                sword.tag = "Attack";
-            }
-            if (weapon == 2)
-            {
-                animator.SetInteger("Attack", 0);
-                if (bowCt == 0)
-                {
-                    Transform clone = Instantiate(prefab, transform.position, transform.rotation) as Transform;
-                    clone.SendMessage("Set", direction);
-                    bowCt = 30;
-                }
-            }
-            if (weapon == 3)
-            {
-                animator.SetInteger("Attack", 1);
-                spear.tag = "Attack";
-            }
-            dirCt = 25;
-        }
-
-        if (animator.GetInteger("Attack") == -1)
-        {
-            sword.tag = "Untagged";
-            spear.tag = "Untagged";
-            animator.SetInteger("Attack", 0);
-        }
-        
-        //Hurt
-        if(hit == 1)
-        {
-            health--;
-            healthBar.SendMessage("SetHealth", health);
-            invuln = 30;
-            moveSpeed = 6;
-            xSpeed = transform.position.x - enemyPos.x;
-            ySpeed = transform.position.y - enemyPos.y;
-            hit = 0;
-        }
-
-        //Movement
-        transform.Translate(moveSpeed * xSpeed * Time.deltaTime, moveSpeed * ySpeed * Time.deltaTime, 0, Space.World);
-        
-        if (moveSpeed > 0) animator.SetFloat("Moving", 1);
-        else animator.SetFloat("Moving", 0);
 	}
 
     void OnCollisionEnter(Collision other)
@@ -297,6 +330,10 @@ public class PlayerScript : MonoBehaviour
             if(health < 7)health++;
             healthBar.SendMessage("SetHealth", health);
             DestroyObject(other.gameObject);
+        }
+        if (other.gameObject.tag == "Respawn")
+        {
+            gameData.SendMessage("ChangeRoom", 1);
         }
     }
 }
