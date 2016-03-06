@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 using System.Collections;
 
 public class PlayerScript : MonoBehaviour
@@ -23,10 +24,13 @@ public class PlayerScript : MonoBehaviour
     private GameObject spear;
     public Transform prefab;
     private Transform clone;
+    private Transform clone1;
+    private Transform clone2;
+    public Transform poof;
     public Transform death;
-    private Renderer rend1;      //Sword Renderer
-    private Renderer rend2;      //Bow Renderer
-    private Renderer rend3;      //Spear Renderer
+    private Renderer rend1;     //Sword Renderer
+    private Renderer rend2;     //Bow Renderer
+    private Renderer rend3;     //Spear Renderer
     private Component healthBar;
     private GameObject gameData;
     
@@ -48,7 +52,7 @@ public class PlayerScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        float maxSpeed = 1;
+        float maxSpeed = 1.2f;
         float accel = 0.5f;
         float decel = 0.4f;
 
@@ -289,8 +293,12 @@ public class PlayerScript : MonoBehaviour
 
                 if (health <= 0)
                 {
-                    DestroyObject(gameObject);
-                    clone = Instantiate(death, transform.position, transform.rotation) as Transform;
+                    clone1 = Instantiate(poof, transform.position, transform.rotation) as Transform;
+                    clone1.Translate(0, 0, 0);
+                    clone2 = Instantiate(death, transform.position, transform.rotation) as Transform;
+                    clone2.Translate(0, 0, 0);
+                    gameData.SendMessage("LoadLevel", 1);
+                    Destroy(gameObject);
                 }
                 invuln = 30;
                 moveSpeed = 6;
@@ -334,6 +342,10 @@ public class PlayerScript : MonoBehaviour
         if (other.gameObject.tag == "Respawn")
         {
             gameData.SendMessage("ChangeRoom", 1);
+        }
+        if (other.gameObject.tag == "Room")
+        {
+            gameData.SendMessage("ChangeNum", other.gameObject.layer-10);
         }
     }
 }

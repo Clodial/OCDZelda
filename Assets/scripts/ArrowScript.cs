@@ -55,7 +55,7 @@ public class ArrowScript : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "Enemy" || other.gameObject.tag == "Wall")
+        if (other.gameObject.tag == "Enemy" || other.gameObject.tag == "Wall" || other.gameObject.tag == "Respawn")
         {
             DestroyObject(gameObject);
         }
