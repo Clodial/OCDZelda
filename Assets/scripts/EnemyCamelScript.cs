@@ -80,7 +80,7 @@ public class EnemyCamelScript : MonoBehaviour
                         pz = Mathf.Sqrt((px * px) + (py * py));
                         if (pz != 0) hyp = moveSpeed / pz;
                         else hyp = 0;
-                        transform.Translate(px * hyp * Time.deltaTime, py * hyp * Time.deltaTime, 0, Space.World);
+                        if(pz > 0.2f)transform.Translate(px * hyp * Time.deltaTime, py * hyp * Time.deltaTime, 0, Space.World);
 
                         if (ct < 280)
                         {
@@ -115,7 +115,7 @@ public class EnemyCamelScript : MonoBehaviour
                         clone2 = Instantiate(pickup, transform.position, transform.rotation) as Transform;
                         clone2.Translate(0, 0, 0);
                     }
-                    Application.Quit();
+                    gameData.SendMessage("QuitGame");
                 }
                 invuln = 30;
                 hit = 0;
