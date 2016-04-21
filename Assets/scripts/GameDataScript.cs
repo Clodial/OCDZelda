@@ -10,6 +10,7 @@ public class GameDataScript : MonoBehaviour
     public int level = 0;
     public int ct = 0;
     public int load = 0;
+    public int quit = 0;
 
     // Update is called once per frame
     void Update()
@@ -21,6 +22,10 @@ public class GameDataScript : MonoBehaviour
         {
             load = 0;
             SceneManager.LoadScene(level);
+        }
+        if (quit == 1 && ct <= 0)
+        {
+            Application.Quit();
         }
     }
 
@@ -44,5 +49,11 @@ public class GameDataScript : MonoBehaviour
         level += i-1;
         load = 1;
         ct = 120;
+    }
+
+    void QuitGame()
+    {
+        quit = 1;
+        ct = 60;
     }
 }

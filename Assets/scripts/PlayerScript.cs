@@ -70,7 +70,8 @@ public class PlayerScript : MonoBehaviour
             if (invuln <= 15)
             {
                 //Basic Movement
-                if (Input.GetKey("w") && !Input.GetKey("d") && !Input.GetKey("s") && !Input.GetKey("a")) //Up
+                if ((Input.GetKey("w") || Input.GetKey("up")) && (!Input.GetKey("d") || !Input.GetKey("right"))
+                        && (!Input.GetKey("s") || !Input.GetKey("down")) && (!Input.GetKey("a") || !Input.GetKey("up"))) //Up
                 {
                     if (moveSpeed < maxSpeed) moveSpeed += accel;
                     if (moveSpeed > maxSpeed) moveSpeed = maxSpeed;
@@ -82,7 +83,8 @@ public class PlayerScript : MonoBehaviour
                         animator.SetInteger("Direction", 0);
                     }
                 }
-                if (Input.GetKey("d") && !Input.GetKey("w") && !Input.GetKey("s") && !Input.GetKey("a")) //Right
+                if ((Input.GetKey("d") || Input.GetKey("right")) && (!Input.GetKey("w") || !Input.GetKey("up"))
+                        && (!Input.GetKey("s") || !Input.GetKey("down")) && (!Input.GetKey("a") || !Input.GetKey("left"))) //Right
                 {
                     if (moveSpeed < maxSpeed) moveSpeed += accel;
                     if (moveSpeed > maxSpeed) moveSpeed = maxSpeed;
@@ -94,7 +96,8 @@ public class PlayerScript : MonoBehaviour
                         animator.SetInteger("Direction", 1);
                     }
                 }
-                if (Input.GetKey("s") && !Input.GetKey("d") && !Input.GetKey("w") && !Input.GetKey("a")) //Down
+                if ((Input.GetKey("s") || Input.GetKey("down")) && (!Input.GetKey("d") || !Input.GetKey("right"))
+                        && (!Input.GetKey("w") || !Input.GetKey("up")) && (!Input.GetKey("a") || !Input.GetKey("left"))) //Down
                 {
                     if (moveSpeed < maxSpeed) moveSpeed += accel;
                     if (moveSpeed > maxSpeed) moveSpeed = maxSpeed;
@@ -106,7 +109,8 @@ public class PlayerScript : MonoBehaviour
                         animator.SetInteger("Direction", 2);
                     }
                 }
-                if (Input.GetKey("a") && !Input.GetKey("d") && !Input.GetKey("s") && !Input.GetKey("w")) //Left
+                if ((Input.GetKey("a") || Input.GetKey("left")) && (!Input.GetKey("d") || !Input.GetKey("right"))
+                        && (!Input.GetKey("s") || !Input.GetKey("down")) && (!Input.GetKey("w") || !Input.GetKey("up"))) //Left
                 {
                     if (moveSpeed < maxSpeed) moveSpeed += accel;
                     if (moveSpeed > maxSpeed) moveSpeed = maxSpeed;
@@ -120,7 +124,8 @@ public class PlayerScript : MonoBehaviour
                 }
 
                 //Diagonal Movement
-                if (Input.GetKey("d") && Input.GetKey("w") && !Input.GetKey("a") && !Input.GetKey("s")) //Up/Right
+                if ((Input.GetKey("d") || Input.GetKey("right")) && (Input.GetKey("w") || Input.GetKey("up"))
+                        && (!Input.GetKey("a") || !Input.GetKey("left")) && (!Input.GetKey("s") || !Input.GetKey("down"))) //Up/Right
                 {
                     if (moveSpeed < maxSpeed) moveSpeed += accel;
                     if (moveSpeed > maxSpeed) moveSpeed = maxSpeed;
@@ -141,7 +146,8 @@ public class PlayerScript : MonoBehaviour
                     }
                     dirCt = 5;
                 }
-                if (Input.GetKey("d") && Input.GetKey("s") && !Input.GetKey("a") && !Input.GetKey("w")) //Down/Right
+                if ((Input.GetKey("d") || Input.GetKey("right")) && (Input.GetKey("s") || Input.GetKey("down"))
+                        && (!Input.GetKey("a") || !Input.GetKey("left")) && (!Input.GetKey("w") || !Input.GetKey("up"))) //Down/Right
                 {
                     if (moveSpeed < maxSpeed) moveSpeed += accel;
                     if (moveSpeed > maxSpeed) moveSpeed = maxSpeed;
@@ -162,7 +168,8 @@ public class PlayerScript : MonoBehaviour
                     }
                     dirCt = 5;
                 }
-                if (Input.GetKey("a") && Input.GetKey("s") && !Input.GetKey("d") && !Input.GetKey("w")) //Down/Left
+                if ((Input.GetKey("a") || Input.GetKey("left")) && (Input.GetKey("s") || Input.GetKey("down"))
+                        && (!Input.GetKey("d") || !Input.GetKey("right")) && (!Input.GetKey("w") || !Input.GetKey("up"))) //Down/Left
                 {
                     if (moveSpeed < maxSpeed) moveSpeed += accel;
                     if (moveSpeed > maxSpeed) moveSpeed = maxSpeed;
@@ -183,7 +190,8 @@ public class PlayerScript : MonoBehaviour
                     }
                     dirCt = 5;
                 }
-                if (Input.GetKey("a") && Input.GetKey("w") && !Input.GetKey("d") && !Input.GetKey("s")) //Up/Left
+                if ((Input.GetKey("a") || Input.GetKey("left")) && (Input.GetKey("w") || Input.GetKey("up"))
+                        && (!Input.GetKey("d") || !Input.GetKey("right")) && (!Input.GetKey("s") || Input.GetKey("down"))) //Up/Left
                 {
                     if (moveSpeed < maxSpeed) moveSpeed += accel;
                     if (moveSpeed > maxSpeed) moveSpeed = maxSpeed;
@@ -212,7 +220,8 @@ public class PlayerScript : MonoBehaviour
             }
 
             //Idle
-            if (!Input.GetKey("a") && !Input.GetKey("w") && !Input.GetKey("d") && !Input.GetKey("s"))
+            if (!Input.GetKey("a") && !Input.GetKey("left") && !Input.GetKey("w") && !Input.GetKey("up")
+                    && !Input.GetKey("d") && !Input.GetKey("right") && !Input.GetKey("s") && !Input.GetKey("down"))
             {
                 if (moveSpeed > 0) moveSpeed -= decel;
                 if (moveSpeed < 0) moveSpeed = 0;
@@ -320,6 +329,8 @@ public class PlayerScript : MonoBehaviour
             if (changeDir == 3) transform.Translate(0, -0.5f * Time.deltaTime, 0, Space.World);
             if (changeDir == 4) transform.Translate(-0.7f * Time.deltaTime, 0, 0, Space.World);
         }
+
+        if (Input.GetKey(KeyCode.Escape)) gameData.SendMessage("QuitGame");
 	}
 
     void OnCollisionEnter(Collision other)
