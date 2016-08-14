@@ -17,14 +17,14 @@ public class SwordStateScript : StateMachineBehaviour {
 
     void OnStateUpdate(Animator animator)
     {
-        animator.SetInteger("Attack", 0);
+        if (animator.GetInteger("Weapon") == 1 || animator.GetInteger("Weapon") == 3) animator.SetInteger("Attack", 0);
     }
 
     void OnStateExit(Animator animator)
     {
         //sword = GameObject.Find("Sword");
         animator.gameObject.tag = "Player";
-        animator.SetInteger("Attack", -1);
+        if(animator.GetInteger("Weapon") == 1)animator.SetInteger("Attack", -1);
     }
 
 	// OnStateExit is called when a transition ends and the state machine finishes evaluating this state

@@ -7,7 +7,7 @@ public class PlayerScript : MonoBehaviour
     private float moveSpeed = 0;
     private float xSpeed = 0;
     private float ySpeed = 0;
-    private int direction = 0;
+    private int direction = 2;
     private int dirCt = 0;
     private int locked = 0;
     public int health = 7;
@@ -253,13 +253,15 @@ public class PlayerScript : MonoBehaviour
                         animator.SetInteger("Weapon", 3);
                         break;
                 }
+
+                animator.SetInteger("Attack", 0);
             }
 
             //Attack
-            if (Input.GetKeyDown("p"))
+            if (Input.GetKey("p"))
             {
                 locked = 1;
-                if (weapon == 2) animator.SetInteger("Attack", 1);
+                if (weapon == 2 && bowCt < 5) animator.SetInteger("Attack", 1);
             }
             if (Input.GetKeyUp("p"))
             {
@@ -284,10 +286,10 @@ public class PlayerScript : MonoBehaviour
                     animator.SetInteger("Attack", 1);
                     spear.tag = "Attack";
                 }
-                dirCt = 25;
+                dirCt = 20;
             }
 
-            if (animator.GetInteger("Attack") == -1)
+            if (animator.GetInteger("Attack") == -1 && (weapon == 1 || weapon == 3))
             {
                 sword.tag = "Untagged";
                 spear.tag = "Untagged";
