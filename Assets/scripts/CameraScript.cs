@@ -8,8 +8,9 @@ public class CameraScript : MonoBehaviour
     private float moveX = 0;
     private float moveY = 0;
     public int uCheck, dCheck, lCheck, rCheck = 0;
+    private Collider uPoint, dPoint, lPoint, rPoint = null;
     public int collide;
-    public int changeRoom;
+    public int changeRoom = 0;
     public int changeDir = 0;
     public int changing = 0;
     private GameObject gameData;
@@ -25,6 +26,7 @@ public class CameraScript : MonoBehaviour
     {
         player = GameObject.FindGameObjectWithTag("Player").transform.position;
         GameDataScript gameDataScript = gameData.GetComponent<GameDataScript>();
+
         changeRoom = gameDataScript.changeRoom;
 
         if (changeRoom == 0)
@@ -81,56 +83,38 @@ public class CameraScript : MonoBehaviour
         }
 	}
 
-    /*void OnCollisionExit(Collision other)
-    {
-        uCheck = 0;
-        dCheck = 0;
-        lCheck = 0;
-        rCheck = 0;
-
-        if (other.gameObject.transform.position.x > transform.position.x + 2 && changeDir == 4)
-        {
-            changeRoom = 0;
-            changing = 0;
-        }
-        if (other.gameObject.transform.position.x < transform.position.x - 2 && changeDir == 2)
-        {
-            changeRoom = 0;
-            changing = 0;
-        }
-        if (other.gameObject.transform.position.y > transform.position.x + 1.5 && changeDir == 3)
-        {
-            changeRoom = 0;
-            changing = 0;
-        }
-        if (other.gameObject.transform.position.y < transform.position.x - 1.5 && changeDir == 1)
-        {
-            changeRoom = 0;
-            changing = 0;
-        }
-        collide = 0;
-    }*/
-    
-    /*void OnCollisionEnter(Collision other)
-    {
-        if (other.gameObject.tag == "MainCamera")
-        {
-            if (other.gameObject.transform.position.x > transform.position.x + 2) rCheck = 1;
-            if (other.gameObject.transform.position.x < transform.position.x - 2) lCheck = 1;
-            if (other.gameObject.transform.position.y > transform.position.x + 1.5) uCheck = 1;
-            if (other.gameObject.transform.position.y < transform.position.x - 1.5) dCheck = 1;
-        }
-        collide = 1;
-    }*/
-
     void OnTriggerStay(Collider other)
     {
         if (other.tag == "MainCamera" && changeRoom == 0)
         {
-            if (other.transform.position.x > transform.position.x + 2 && other.transform.position.y < transform.position.y + 1.5 && other.transform.position.y > transform.position.y - 1.5) rCheck = 1;
-            if (other.transform.position.x < transform.position.x - 2 && other.transform.position.y < transform.position.y + 1.5 && other.transform.position.y > transform.position.y - 1.5) lCheck = 1;
-            if (other.transform.position.y > transform.position.y + 1.5 && other.transform.position.x < transform.position.x + 2 && other.transform.position.x > transform.position.x - 2) uCheck = 1;
-            if (other.transform.position.y < transform.position.y - 1.5 && other.transform.position.x < transform.position.x + 2 && other.transform.position.x > transform.position.x - 2) dCheck = 1;
+            if (other.transform.position.x > transform.position.x && other.transform.rotation.z != 0)
+            {
+                rCheck = 1;
+                rPoint = other;
+
+                if (player.x > other.transform.position.x) rCheck = 0;
+            }
+            if (other.transform.position.x < transform.position.x && other.transform.rotation.z != 0)
+            {
+                lCheck = 1;
+                lPoint = other;
+
+                if (player.x < other.transform.position.x) lCheck = 0;
+            }
+            if (other.transform.position.y > transform.position.y && other.transform.rotation.z == 0)
+            {
+                uCheck = 1;
+                uPoint = other;
+
+                if (player.y > other.transform.position.y) uCheck = 0;
+            }
+            if (other.transform.position.y < transform.position.y && other.transform.rotation.z == 0)
+            {
+                dCheck = 1;
+                dPoint = other;
+
+                if (player.y < other.transform.position.y) dCheck = 0;
+            }
         }
         collide = 1;
     }
@@ -142,25 +126,29 @@ public class CameraScript : MonoBehaviour
         lCheck = 0;
         rCheck = 0;
 
-        if (other.transform.position.x > transform.position.x + 2 && changeDir == 4)
+        if (other.transform.position.x > transform.position.x + 2 && changeDir == 4 && lPoint.Equals(other))
         {
             changeRoom = 0;
             changing = 0;
+            lCheck = 0;
         }
-        if (other.transform.position.x < transform.position.x - 2 && changeDir == 2)
+        if (other.transform.position.x < transform.position.x - 2 && changeDir == 2 && rPoint.Equals(other))
         {
             changeRoom = 0;
             changing = 0;
+            rCheck = 0;
         }
-        if (other.transform.position.y > transform.position.y + 1.5 && changeDir == 3)
+        if (other.transform.position.y > transform.position.y + 1.5 && changeDir == 3 && dPoint.Equals(other))
         {
             changeRoom = 0;
             changing = 0;
+            dCheck = 0;
         }
-        if (other.transform.position.y < transform.position.y - 1.5 && changeDir == 1)
+        if (other.transform.position.y < transform.position.y - 1.5 && changeDir == 1 && uPoint.Equals(other))
         {
             changeRoom = 0;
             changing = 0;
+            uCheck = 0;
         }
 
         gameData.SendMessage("ChangeRoom", changeRoom);
