@@ -27,6 +27,7 @@ public class CameraScript : MonoBehaviour
         player = GameObject.FindGameObjectWithTag("Player").transform.position;
         GameDataScript gameDataScript = gameData.GetComponent<GameDataScript>();
 
+        changeDir = gameDataScript.changeDir;
         changeRoom = gameDataScript.changeRoom;
 
         if (changeRoom == 0)
@@ -46,26 +47,26 @@ public class CameraScript : MonoBehaviour
         }
         else
         {
-            if (changing == 0)
+            /*if (changing == 0)
             {
-                if (player.x > transform.position.x + 1.8)
+                if (player.x > transform.position.x + 0.9)
                 {
                     moveX = 1;
                     changeDir = 2;
                 }
-                else if (player.x < transform.position.x - 1.8)
+                else if (player.x < transform.position.x - 0.9)
                 {
                     moveX = -1;
                     changeDir = 4;
                 }
                 else moveX = 0;
 
-                if (player.y > transform.position.y + 1.3)
+                if (player.y > transform.position.y + 0.6)
                 {
                     moveY = 1;
                     changeDir = 1;
                 }
-                else if (player.y < transform.position.y - 1.3)
+                else if (player.y < transform.position.y - 0.6)
                 {
                     moveY = -1;
                     changeDir = 3;
@@ -75,7 +76,25 @@ public class CameraScript : MonoBehaviour
                 gameData.SendMessage("ChangeDir", changeDir);
 
                 changing = 1;
+            }*/
+            
+            switch (changeDir)
+            {
+                case 1:
+                    moveY = 1;
+                    break;
+                case 2:
+                    moveX = 1;
+                    break;
+                case 3:
+                    moveY = -1;
+                    break;
+                case 4:
+                    moveX = -1;
+                    break;
+                default: break;
             }
+
             for (int i = 0; i < 10; i++)
             {
                 transform.Translate(0.2f * moveX * Time.deltaTime, 0.2f * moveY * Time.deltaTime, 0, Space.World);

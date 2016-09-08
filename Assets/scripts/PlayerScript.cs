@@ -7,7 +7,7 @@ public class PlayerScript : MonoBehaviour
     private float moveSpeed = 0;
     private float xSpeed = 0;
     private float ySpeed = 0;
-    private int direction = 2;
+    public int direction = 2;
     private int dirCt = 0;
     private int locked = 0;
     public int health = 7;
@@ -33,9 +33,15 @@ public class PlayerScript : MonoBehaviour
     private Renderer rend3;     //Spear Renderer
     private Component healthBar;
     private GameObject gameData;
-    
-	// Use this for initialization
-	void Start()
+
+    private RaycastHit uHit;
+    private RaycastHit dHit;
+    private RaycastHit lHit;
+    private RaycastHit rHit;
+    private RaycastHit nHit;
+
+    // Use this for initialization
+    void Start()
     {
         animator = this.GetComponent<Animator>();
         animator.SetInteger("Weapon", 1);
@@ -70,11 +76,14 @@ public class PlayerScript : MonoBehaviour
             if (invuln <= 15)
             {
                 //Basic Movement
-                if ((Input.GetKey("w") || Input.GetKey("up")) && (!Input.GetKey("d") || !Input.GetKey("right"))
-                        && (!Input.GetKey("s") || !Input.GetKey("down")) && (!Input.GetKey("a") || !Input.GetKey("up"))) //Up
+                if ((Input.GetKey("w") || Input.GetKey("up")) && (!Input.GetKey("d") && !Input.GetKey("right"))
+                        && (!Input.GetKey("s") && !Input.GetKey("down")) && (!Input.GetKey("a") && !Input.GetKey("up"))) //Up
                 {
-                    if (moveSpeed < maxSpeed) moveSpeed += accel;
-                    if (moveSpeed > maxSpeed) moveSpeed = maxSpeed;
+                    if (!Physics.BoxCast(transform.position, new Vector3(0.1f, 0), Vector3.up, out nHit, Quaternion.identity, 0.14f, 1, QueryTriggerInteraction.Ignore))
+                    {
+                        if (moveSpeed < maxSpeed) moveSpeed += accel;
+                        if (moveSpeed > maxSpeed) moveSpeed = maxSpeed;
+                    }
                     xSpeed = 0;
                     ySpeed = 1;
                     if (dirCt <= 0 && locked == 0)
@@ -83,11 +92,14 @@ public class PlayerScript : MonoBehaviour
                         animator.SetInteger("Direction", 0);
                     }
                 }
-                if ((Input.GetKey("d") || Input.GetKey("right")) && (!Input.GetKey("w") || !Input.GetKey("up"))
-                        && (!Input.GetKey("s") || !Input.GetKey("down")) && (!Input.GetKey("a") || !Input.GetKey("left"))) //Right
+                if ((Input.GetKey("d") || Input.GetKey("right")) && (!Input.GetKey("w") && !Input.GetKey("up"))
+                        && (!Input.GetKey("s") && !Input.GetKey("down")) && (!Input.GetKey("a") && !Input.GetKey("left"))) //Right
                 {
-                    if (moveSpeed < maxSpeed) moveSpeed += accel;
-                    if (moveSpeed > maxSpeed) moveSpeed = maxSpeed;
+                    if (!Physics.BoxCast(transform.position, new Vector3(0, 0.14f), Vector3.right, out nHit, Quaternion.identity, 0.1f, 1, QueryTriggerInteraction.Ignore))
+                    {
+                        if (moveSpeed < maxSpeed) moveSpeed += accel;
+                        if (moveSpeed > maxSpeed) moveSpeed = maxSpeed;
+                    }
                     xSpeed = 1;
                     ySpeed = 0;
                     if (dirCt <= 0 && locked == 0)
@@ -96,26 +108,32 @@ public class PlayerScript : MonoBehaviour
                         animator.SetInteger("Direction", 1);
                     }
                 }
-                if ((Input.GetKey("s") || Input.GetKey("down")) && (!Input.GetKey("d") || !Input.GetKey("right"))
-                        && (!Input.GetKey("w") || !Input.GetKey("up")) && (!Input.GetKey("a") || !Input.GetKey("left"))) //Down
+                if ((Input.GetKey("s") || Input.GetKey("down")) && (!Input.GetKey("d") && !Input.GetKey("right"))
+                        && (!Input.GetKey("w") && !Input.GetKey("up")) && (!Input.GetKey("a") && !Input.GetKey("left"))) //Down
                 {
-                    if (moveSpeed < maxSpeed) moveSpeed += accel;
-                    if (moveSpeed > maxSpeed) moveSpeed = maxSpeed;
+                    if (!Physics.BoxCast(transform.position, new Vector3(0.1f, 0), Vector3.down, out nHit, Quaternion.identity, 0.14f, 1, QueryTriggerInteraction.Ignore))
+                    {
+                        if (moveSpeed < maxSpeed) moveSpeed += accel;
+                        if (moveSpeed > maxSpeed) moveSpeed = maxSpeed;
+                    }
                     xSpeed = 0;
-                    ySpeed = -1;
+                    ySpeed = -1;                   
                     if (dirCt <= 0 && locked == 0)
                     {
                         direction = 2;
                         animator.SetInteger("Direction", 2);
                     }
                 }
-                if ((Input.GetKey("a") || Input.GetKey("left")) && (!Input.GetKey("d") || !Input.GetKey("right"))
-                        && (!Input.GetKey("s") || !Input.GetKey("down")) && (!Input.GetKey("w") || !Input.GetKey("up"))) //Left
+                if ((Input.GetKey("a") || Input.GetKey("left")) && (!Input.GetKey("d") && !Input.GetKey("right"))
+                        && (!Input.GetKey("s") && !Input.GetKey("down")) && (!Input.GetKey("w") && !Input.GetKey("up"))) //Left
                 {
-                    if (moveSpeed < maxSpeed) moveSpeed += accel;
-                    if (moveSpeed > maxSpeed) moveSpeed = maxSpeed;
+                    if (!Physics.BoxCast(transform.position, new Vector3(0, 0.14f), Vector3.left, out nHit, Quaternion.identity, 0.1f, 1, QueryTriggerInteraction.Ignore))
+                    {
+                        if (moveSpeed < maxSpeed) moveSpeed += accel;
+                        if (moveSpeed > maxSpeed) moveSpeed = maxSpeed;
+                    }
                     xSpeed = -1;
-                    ySpeed = 0;
+                    ySpeed = 0;                  
                     if (dirCt <= 0 && locked == 0)
                     {
                         direction = 3;
@@ -133,15 +151,15 @@ public class PlayerScript : MonoBehaviour
                     ySpeed = 1 / Mathf.Sqrt(2);
                     if (dirCt <= 0 && locked == 0)
                     {
-                        if (direction == 0 || direction == 3)
+                        if (direction == 3)
                         {
                             direction = 0;
                             animator.SetInteger("Direction", 0);
                         }
-                        else
+                        if (direction == 2)
                         {
-                            direction = 1;
-                            animator.SetInteger("Direction", 1);
+                            //direction = 1;
+                            //animator.SetInteger("Direction", 1);
                         }
                     }
                     dirCt = 5;
@@ -157,10 +175,10 @@ public class PlayerScript : MonoBehaviour
                     {
                         if (direction == 1 || direction == 0)
                         {
-                            direction = 1;
-                            animator.SetInteger("Direction", 1);
+                            //direction = 1;
+                            //animator.SetInteger("Direction", 1);
                         }
-                        else
+                        if (direction == 2 || direction == 3)
                         {
                             direction = 2;
                             animator.SetInteger("Direction", 2);
@@ -182,7 +200,7 @@ public class PlayerScript : MonoBehaviour
                             direction = 2;
                             animator.SetInteger("Direction", 2);
                         }
-                        else
+                        if (direction == 3 || direction == 0)
                         {
                             direction = 3;
                             animator.SetInteger("Direction", 3);
@@ -204,7 +222,7 @@ public class PlayerScript : MonoBehaviour
                             direction = 3;
                             animator.SetInteger("Direction", 3);
                         }
-                        else
+                        if (direction == 0 || direction == 1)
                         {
                             direction = 0;
                             animator.SetInteger("Direction", 0);
@@ -318,8 +336,27 @@ public class PlayerScript : MonoBehaviour
                 hit = 0;
             }
 
-            //Movement
-            transform.Translate(moveSpeed * xSpeed * Time.deltaTime, moveSpeed * ySpeed * Time.deltaTime, 0, Space.World);
+            for (int i = 0; i < 10; i++)
+            {
+                if (castUp() && ySpeed > 0) ySpeed = 0;
+                if (castDown() && ySpeed < 0) ySpeed = 0;
+                if (castLeft() && xSpeed < 0) xSpeed = 0;
+                if (castRight() && xSpeed > 0) xSpeed = 0;
+
+                //Crushed
+                if (((castUp() && uHit.transform.tag == "Wall") && (castDown() && dHit.transform.tag == "Wall")) ||  
+                        ((castLeft() && lHit.transform.tag == "Wall") && (castRight() && rHit.transform.tag == "Wall")))
+                {
+                    health = 0;
+                    healthBar.SendMessage("SetHealth", health);
+                    hit = 1;
+                }
+
+                //Movement
+                transform.Translate(0.1f * moveSpeed * xSpeed * Time.deltaTime, 0.1f * moveSpeed * ySpeed * Time.deltaTime, 0, Space.World);
+            }
+
+            if (xSpeed == 0 && ySpeed == 0) moveSpeed = 0;
 
             if (moveSpeed > 0) animator.SetFloat("Moving", 1);
             else animator.SetFloat("Moving", 0);
@@ -335,6 +372,26 @@ public class PlayerScript : MonoBehaviour
         if (Input.GetKey(KeyCode.Escape)) gameData.SendMessage("QuitGame");
 	}
 
+    bool castUp()
+    {
+        return Physics.BoxCast(transform.position, new Vector3(0.06f, 0), Vector3.up, out uHit, Quaternion.identity, 0.12f, 1, QueryTriggerInteraction.Ignore);
+    }
+
+    bool castDown()
+    {
+        return Physics.BoxCast(transform.position, new Vector3(0.06f, 0), Vector3.down, out dHit, Quaternion.identity, 0.12f, 1, QueryTriggerInteraction.Ignore);
+    }
+
+    bool castLeft()
+    {
+        return Physics.BoxCast(transform.position, new Vector3(0, 0.1f), Vector3.left, out lHit, Quaternion.identity, 0.07f, 1, QueryTriggerInteraction.Ignore);
+    }
+
+    bool castRight()
+    {
+        return Physics.BoxCast(transform.position, new Vector3(0, 0.1f), Vector3.right, out rHit, Quaternion.identity, 0.07f, 1, QueryTriggerInteraction.Ignore);
+    }
+
     void OnCollisionEnter(Collision other)
     {
         if (other.gameObject.tag == "Enemy" && invuln == 0)
@@ -346,6 +403,11 @@ public class PlayerScript : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
+        if (other.gameObject.tag == "Enemy" && invuln == 0)
+        {
+            hit = 1;
+            enemyPos = other.transform.position;
+        }
         if (other.gameObject.tag == "Health")
         {
             if(health < 7)health++;
@@ -354,6 +416,17 @@ public class PlayerScript : MonoBehaviour
         }
         if (other.gameObject.tag == "Respawn")
         {
+            if (other.transform.rotation.z != 0)
+            {
+                if (transform.position.x < other.transform.position.x) changeDir = 2;
+                else changeDir = 4;
+            }
+            else
+            {
+                if (transform.position.y < other.transform.position.y) changeDir = 1;
+                else changeDir = 3;
+            }
+            gameData.SendMessage("ChangeDir", changeDir);
             gameData.SendMessage("ChangeRoom", 1);
         }
         if (other.gameObject.tag == "Room")
