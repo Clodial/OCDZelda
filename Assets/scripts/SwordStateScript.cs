@@ -1,9 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class SwordStateScript : StateMachineBehaviour {
-
-    private Animator ani;
+public class SwordStateScript : StateMachineBehaviour
+{
     
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
 	//override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
@@ -24,7 +23,7 @@ public class SwordStateScript : StateMachineBehaviour {
     {
         //sword = GameObject.Find("Sword");
         animator.gameObject.tag = "Player";
-        if(animator.GetInteger("Weapon") == 1)animator.SetInteger("Attack", -1);
+        if(animator.GetInteger("Weapon") == 1 || animator.GetInteger("Weapon") == 3) animator.SetInteger("Attack", -1);
     }
 
 	// OnStateExit is called when a transition ends and the state machine finishes evaluating this state
