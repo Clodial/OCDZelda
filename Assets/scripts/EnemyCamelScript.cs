@@ -8,19 +8,25 @@ public class EnemyCamelScript : MonoBehaviour
     public float px, py, pz, hyp;
     private int state = 0;
     private int ct = 30;
+
     private int hit = 0;
     private int health = 7;
     private int invuln = 0;
+
+    public int isBoss;
     public int room;
     private int currentRoom;
     private int changeRoom;
+
     private Animator animator;
     private Vector3 player;
     private Vector3 newScale;
+
     public Transform pickup;
     public Transform poof;
     private Transform clone1;
     private Transform clone2;
+
     private Renderer camelRenderer;
     private Renderer healthBar;
     private Component healthBarScript;
@@ -31,9 +37,11 @@ public class EnemyCamelScript : MonoBehaviour
     {
         animator = this.GetComponent<Animator>();
         camelRenderer = this.GetComponent<Renderer>();
-        healthBar = GameObject.Find("Boss Health Bar").GetComponent<Renderer>();
-        healthBarScript = GameObject.Find("Boss Health Bar").GetComponent("HealthBarScript");
-        
+        if (isBoss == 1)
+        {
+            healthBar = GameObject.Find("Boss Health Bar").GetComponent<Renderer>();
+            healthBarScript = GameObject.Find("Boss Health Bar").GetComponent("HealthBarScript");
+        }
 	}
 	
 	// Update is called once per frame
@@ -48,7 +56,7 @@ public class EnemyCamelScript : MonoBehaviour
 
         if (currentRoom == room && changeRoom == 0)
         {
-            healthBar.enabled = true;
+            if(isBoss == 1) healthBar.enabled = true;
 
             if (invuln % 10 == 9) camelRenderer.enabled = false;
             else camelRenderer.enabled = true;
@@ -103,7 +111,7 @@ public class EnemyCamelScript : MonoBehaviour
             if (hit == 1)
             {
                 health--;
-                healthBarScript.SendMessage("SetHealth", health);
+                if(isBoss == 1) healthBarScript.SendMessage("SetHealth", health);
 
                 if (health <= 0)
                 {
@@ -115,7 +123,7 @@ public class EnemyCamelScript : MonoBehaviour
                         clone2 = Instantiate(pickup, transform.position, transform.rotation) as Transform;
                         clone2.Translate(0, 0, 0);
                     }
-                    gameData.SendMessage("QuitGame");
+                    if(isBoss == 1) gameData.SendMessage("LoadLevel", 2);
                 }
                 invuln = 30;
                 hit = 0;
@@ -123,11 +131,11 @@ public class EnemyCamelScript : MonoBehaviour
         }
         else
         {
-            healthBar.enabled = false;
+            if (isBoss == 1) healthBar.enabled = false;
         }
 	}
 
-    void OnTriggerEnter(Collider other)
+    void OnTriggerStay(Collider other)
     {
         if (other.tag == "Attack" && invuln == 0)
         {

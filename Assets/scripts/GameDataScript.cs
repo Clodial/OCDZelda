@@ -7,7 +7,7 @@ public class GameDataScript : MonoBehaviour
     public int changeRoom = 0;
     public int changeDir = 0;
     public int roomNum = 1;
-    public int level = 0;
+    public int level = 1;
     public int ct = 0;
     public int load = 0;
     public int quit = 0;
@@ -46,14 +46,20 @@ public class GameDataScript : MonoBehaviour
 
     void LoadLevel(int i)
     {
-        level += i-1;
+        level = i;
         load = 1;
-        ct = 120;
+        ct = 45;
+    }
+
+    void ReloadLevel()
+    {
+        load = 1;
+        ct = 45;
     }
 
     void QuitGame()
     {
         quit = 1;
-        ct = 60;
+        ct = 30;
     }
 }

@@ -44,14 +44,14 @@ public class EnemyRockScript : MonoBehaviour {
         }
 	}
 
-    void OnTriggerEnter(Collider other)
+    void OnTriggerStay(Collider other)
     {
         if (other.tag == "Attack")
         {
             DestroyObject(gameObject);
             clone1 = Instantiate(poof, transform.position, transform.rotation) as Transform;
             clone1.Translate(0, 0, 0);
-            if (Random.Range(0, 99) > 33)
+            if (Random.Range(0, 99) > 14)
             {
                 clone2 = Instantiate(pickup, transform.position, transform.rotation) as Transform;
                 clone2.Translate(0, 0, 0);
