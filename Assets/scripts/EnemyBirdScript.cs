@@ -146,7 +146,7 @@ public class EnemyBirdScript : MonoBehaviour
         }
     }
 
-    void OnTriggerEnter(Collider other)
+    void OnTriggerStay(Collider other)
     {
         if (other.tag == "Attack")
         {
@@ -155,6 +155,7 @@ public class EnemyBirdScript : MonoBehaviour
                 DestroyObject(gameObject);
                 clone = Instantiate(poof, transform.position, transform.rotation) as Transform;
                 clone.Translate(0, 0, 0);
+                if(isCapt == 1) gameData.SendMessage("LoadLevel", 3);
             }
             health--;
             rend.enabled = false;

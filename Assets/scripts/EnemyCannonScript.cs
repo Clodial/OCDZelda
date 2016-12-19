@@ -4,7 +4,7 @@ using System.Collections;
 public class EnemyCannonScript : MonoBehaviour
 {
     private float moveSpeed = 0.5f;
-    private int dir = 1;
+    public int dir = 1;
     private float shoot;
     public int rot;
     public int room;
@@ -38,7 +38,7 @@ public class EnemyCannonScript : MonoBehaviour
                 clone.Translate(0, 0, 0);
                 clone.Rotate(0, 0, 180 * rot);
 
-                shoot = Time.time;
+                shoot = Time.time + Random.Range(-0.2f, 0.2f);
             }
 
             transform.Translate(dir * moveSpeed * Time.deltaTime, 0, 0);

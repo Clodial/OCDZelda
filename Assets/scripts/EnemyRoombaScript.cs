@@ -65,7 +65,7 @@ public class EnemyRoombaScript : MonoBehaviour
         }
 	}
 
-    void OnTriggerEnter(Collider other)
+    void OnTriggerStay(Collider other)
     {
         if (other.tag == "Attack")
         {
@@ -77,12 +77,18 @@ public class EnemyRoombaScript : MonoBehaviour
                 clone2 = Instantiate(pickup, transform.position, transform.rotation) as Transform;
                 clone2.Translate(0, 0, 0);
             }
+            direction += 2;
+            if (direction > 3) direction -= 4;
+            collCt += 15;
+            animator.SetInteger("Direction", direction);
         }
-
-        direction += 2;
-        if (direction > 3) direction -= 4;
-        collCt += 10;
-        animator.SetInteger("Direction", direction);
+        if(other.tag == "Respawn")
+        {
+            direction += 2;
+            if (direction > 3) direction -= 4;
+            collCt += 15;
+            animator.SetInteger("Direction", direction);
+        }
     }
 
     void OnCollisionEnter(Collision coll)
@@ -94,5 +100,7 @@ public class EnemyRoombaScript : MonoBehaviour
             if(coll.gameObject.tag == "Wall")collCt += 10;
             animator.SetInteger("Direction", direction);
         }
+
+        if (coll.transform.tag == "Player") coll.transform.SendMessage("OnHit", transform.position);
     }
 }

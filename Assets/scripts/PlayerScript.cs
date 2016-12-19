@@ -17,7 +17,6 @@ public class PlayerScript : MonoBehaviour
     private int bowCt = 0;
     private int changeRoom;
     private int changeDir;
-    private Vector3 enemyPos;
     private Animator animator;
     private GameObject sword;
     private GameObject bow;
@@ -314,28 +313,6 @@ public class PlayerScript : MonoBehaviour
                 animator.SetInteger("Attack", 0);
             }
 
-            //Hurt
-            if (hit == 1)
-            {
-                health--;
-                healthBar.SendMessage("SetHealth", health);
-
-                if (health <= 0)
-                {
-                    clone1 = Instantiate(poof, transform.position, transform.rotation) as Transform;
-                    clone1.Translate(0, 0, 0);
-                    clone2 = Instantiate(death, transform.position, transform.rotation) as Transform;
-                    clone2.Translate(0, 0, 0);
-                    gameData.SendMessage("LoadLevel", 1);
-                    Destroy(gameObject);
-                }
-                invuln = 30;
-                moveSpeed = 6;
-                xSpeed = transform.position.x - enemyPos.x;
-                ySpeed = transform.position.y - enemyPos.y;
-                hit = 0;
-            }
-
             for (int i = 0; i < 10; i++)
             {
                 if (castUp() && ySpeed > 0) ySpeed = 0;
@@ -372,6 +349,29 @@ public class PlayerScript : MonoBehaviour
         if (Input.GetKey(KeyCode.Escape)) gameData.SendMessage("QuitGame");
 	}
 
+    void OnHit(Vector3 enemyPos)
+    {
+        if (invuln == 0)
+        {
+            health--;
+            healthBar.SendMessage("SetHealth", health);
+
+            if (health <= 0)
+            {
+                clone1 = Instantiate(poof, transform.position, transform.rotation) as Transform;
+                clone1.Translate(0, 0, 0);
+                clone2 = Instantiate(death, transform.position, transform.rotation) as Transform;
+                clone2.Translate(0, 0, 0);
+                gameData.SendMessage("ReloadLevel");
+                Destroy(gameObject);
+            }
+            invuln = 30;
+            moveSpeed = 6;
+            xSpeed = transform.position.x - enemyPos.x;
+            ySpeed = transform.position.y - enemyPos.y;
+        }
+    }
+
     bool castUp()
     {
         return Physics.BoxCast(transform.position, new Vector3(0.06f, 0), Vector3.up, out uHit, Quaternion.identity, 0.12f, 1, QueryTriggerInteraction.Ignore);
@@ -392,28 +392,31 @@ public class PlayerScript : MonoBehaviour
         return Physics.BoxCast(transform.position, new Vector3(0, 0.1f), Vector3.right, out rHit, Quaternion.identity, 0.07f, 1, QueryTriggerInteraction.Ignore);
     }
 
-    void OnCollisionEnter(Collision other)
+    void OnCollisionStay(Collision other)
     {
         if (other.gameObject.tag == "Enemy" && invuln == 0)
         {
-            hit = 1;
-            enemyPos = other.transform.position;
+            OnHit(other.transform.position);
         }
     }
 
-    void OnTriggerEnter(Collider other)
+    void OnTriggerStay(Collider other)
     {
         if (other.gameObject.tag == "Enemy" && invuln == 0)
         {
-            hit = 1;
-            enemyPos = other.transform.position;
+            OnHit(other.transform.position);
         }
+
         if (other.gameObject.tag == "Health")
         {
             if(health < 7)health++;
             healthBar.SendMessage("SetHealth", health);
             DestroyObject(other.gameObject);
         }
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
         if (other.gameObject.tag == "Respawn")
         {
             if (other.transform.rotation.z != 0)
